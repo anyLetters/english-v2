@@ -17,6 +17,23 @@ const app = express();
 //     });
 // };
 
+// function reSetup(data) {
+//     const newData = data.map(e => {
+//         return {
+//             id: e.id,
+//             eng: e.eng,
+//             rus: e.rus,
+//             meanings: JSON.parse(e.translation),
+//             hard: false,
+//             created_at: e.created_at.split('T')[0]
+//         }
+//     });
+//     fs.writeFile('./api/data.json', JSON.stringify(newData), (err) => {
+//         if (err) throw err;
+//     });
+// }
+// reSetup(data);
+
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -32,7 +49,7 @@ app.get('/api/data', (req, res) => {
     res.send(data);
 });
 
-app.post('/api/todos', (req, res) => {
+app.post('/api/words', (req, res) => {
     const todo = {
         id: nextId++,
         title: req.body.title,

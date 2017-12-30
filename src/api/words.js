@@ -1,4 +1,5 @@
 import apiKey from './secrets.js';
+import axios from 'axios';
 
 export default class ApiWords {
 
@@ -10,30 +11,27 @@ export default class ApiWords {
 
 			resolve(response);
 
-		}).then((word) => {
-			if (word.status === 200) {
-				return word.json();
-			} else {
-				throw new Error('Yandex dictionary response has been failed by status');
-			}
-		}).then((word) => {
+		}).then(word => {
+			return word.json();
+		}).then(word => {
 			if (word.def.length !== 0) {
 				return this.formatJSON(word);
 			} else {
 				console.error('Yandex dictionary API response is empty');
-				return null;
+				throw new Error('Yandex dictionary API response is empty');
 			}
-		}).catch((err) => {
-			return err;
+		}).catch(err => {
+			return Promise.reject(err);
 		});
 	}
 
 	static formatJSON(data) {
+		let id = '';
 		let eng = data['def'][0]['text'];
 		let rus = data['def'][0]['tr'][0]['text'];
 		let meanings = {};
 		let hard = false;
-		let created_at = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+		let created_at = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
 		let words = [];
 
 		data['def'].forEach(function(x) {
@@ -45,13 +43,19 @@ export default class ApiWords {
 			words = [];
 		})
 
-		return {
-			eng,
-			rus,
-			meanings,
-			hard,
-			created_at
-		}
+		return axios.get('/api/data')
+			.then(response => response.data)
+			.then(data => {
+				id = data[data.length - 1].id + 1;
+				return {
+					id,
+					eng,
+					rus,
+					meanings,
+					hard,
+					created_at
+				}
+			})
 	}
 	
 	// add/edit a user
