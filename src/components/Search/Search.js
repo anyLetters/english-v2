@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import SearchField from '../UI/SearchField/SearchField.js';
 
 export default class Search extends Component {
     constructor(props) {
@@ -10,19 +12,21 @@ export default class Search extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange() {
-        this.props.onChangeKeywordFilter({keyword: this.refs.search.value});
-        this.setState({keyword: this.refs.search.value});
+    handleChange(keyword) {
+        this.setState({keyword});
+        this.props.onChangeKeywordFilter({keyword});
     }
 
     render() {
         return (
-            <input 
-                type="text" 
-                ref='search' 
-                onChange={this.handleChange} 
-                defaultValue={this.state.keyword}
-                placeholder='search'/>
+            <div className='search menu__element'>
+                <SearchField keyword={this.state.keyword} onChange={this.handleChange}  />
+            </div>
         )
     }
 }
+
+Search.propTypes = {
+    keyword: PropTypes.string,
+    onChangeKeywordFilter: PropTypes.func.isRequired
+};

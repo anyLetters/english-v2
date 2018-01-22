@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Radio from '../UI/Radio/Radio.js';
 
 export default class ToggleMode extends Component {
     constructor(props) {
@@ -9,28 +11,20 @@ export default class ToggleMode extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(e) {
-        const value = e.target.value;
-        this.setState({ mode: e.target.value }, () => this.props.onToggleMode(value));
+    handleChange(mode) {
+        this.setState({ mode }, () => this.props.onToggleMode(mode));
     }
 
     render() {
         return (
-            <div>
-                <span>mode:</span>
-                <input 
-                    type="radio" 
-                    value='RANDOM' 
-                    checked={this.state.mode === 'RANDOM'}
-                    onChange={this.handleChange} 
-                    name='mode'/>
-                <input 
-                    type="radio" 
-                    value='SERIAL' 
-                    checked={this.state.mode === 'SERIAL'} 
-                    onChange={this.handleChange}
-                    name='mode'/>
+            <div className='toggle-block'>
+                <Radio mode={this.state.mode} onChange={this.handleChange} />
             </div>
         )
     }
 }
+
+ToggleMode.propTypes = {
+    mode: PropTypes.string.isRequired,
+    onToggleMode: PropTypes.func.isRequired
+};

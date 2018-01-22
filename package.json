@@ -6,8 +6,11 @@
     "axios": "^0.17.1",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
+    "material-ui": "^1.0.0-beta.26",
+    "material-ui-icons": "^1.0.0-beta.17",
     "node-sass-chokidar": "^0.0.3",
     "nodemon": "^1.14.6",
+    "normalize.css": "^7.0.0",
     "npm-run-all": "^4.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -15,8 +18,10 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
+    "react-ultimate-pagination-material-ui": "^1.0.3",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
+    "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1"
   },
@@ -29,7 +34,7 @@
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "node-server": "node server"
+    "node-server": "nodemon server"
   },
   "main": "index.js",
   "license": "MIT",

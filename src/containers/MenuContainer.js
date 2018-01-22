@@ -5,7 +5,8 @@ import Menu from '../components/Menu/Menu.js';
 function mapStateToProps(state) {
     return {
         filter: state.filter,
-        mode: state.mode
+        mode: state.mode,
+        count: state.words.length
     };
 }
 

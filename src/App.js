@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
 import WordsPage from './components/WordsPage/WordsPage.js';
 import HomePage from './components/HomePage/HomePage.js';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Loading from './components/UI/Loading/Loading.js';
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {
 			fetching: props.fetching
 		}
@@ -26,25 +26,22 @@ class App extends Component {
 
 	renderApp() {
 		return (
-			<div>
-				<Switch>
-					<Route path='/' exact component={HomePage} />
-					<Route path='/words' component={WordsPage} />
-					<Route path='/phrases' component={() => (<div>123</div>)} />
-				</Switch>
-					
-		 	</div>
+			<Switch>
+				<Route path='/' exact component={HomePage} />
+				<Route path='/words' component={WordsPage} />
+				<Route path='/phrases' component={() => (<div>123</div>)} />
+			</Switch>
 		)
 	}
 
 	renderLoading() {
-		return <div>Loading...</div>
+		return <Loading />;
 	}
 
 	render() {
 		return (
 			<Router>
-				<main>
+				<main className='App'>
 					{!this.state.fetching ? this.renderApp() : this.renderLoading()}
 				</main>
 		 	</Router>

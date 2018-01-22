@@ -9,13 +9,11 @@ const data = require('./api/data');
 
 const app = express();
 
-// let nextId = 5;
-
-// function updateTodosFile(data) {
-//     fs.writeFile('./api/todos.json', JSON.stringify(data), (err) => {
-//         if (err) throw err;
-//     });
-// };
+function updateJSON(data) {
+    fs.writeFile('./api/data.json', JSON.stringify(data), (err) => {
+        if (err) throw err;
+    });
+};
 
 // function reSetup(data) {
 //     const newData = data.map(e => {
@@ -23,11 +21,12 @@ const app = express();
 //             id: e.id,
 //             eng: e.eng,
 //             rus: e.rus,
-//             meanings: JSON.parse(e.translation),
 //             hard: false,
+//             translations: JSON.parse(e.translation),
 //             created_at: e.created_at.split('T')[0]
 //         }
 //     });
+//     console.log(newData[555]);
 //     fs.writeFile('./api/data.json', JSON.stringify(newData), (err) => {
 //         if (err) throw err;
 //     });
@@ -50,61 +49,75 @@ app.get('/api/data', (req, res) => {
 });
 
 app.post('/api/words', (req, res) => {
-    const todo = {
-        id: nextId++,
-        title: req.body.title,
-        completed: false
+    const word = {
+        id: data[data.length - 1].id + 1,
+        eng: req.body.word.eng,
+        rus: req.body.word.rus,
+        hard: req.body.word.hard,
+        translations: req.body.word.translations,
+        created_at: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
     };
 
-    todos.push(todo);
+    console.log(word);
+    
+    data.push(word);
 
-    updateTodosFile(todos);
+    updateJSON(data);
 
-    res.send(todo);
+    res.send(word);
 });
 
-app.put('/api/todos/:id', (req, res) => {
-    let todo;
+app.put('/api/words/:id', (req, res) => {
+    let word;
 
-    for (let i = 1; i < todos.length; i++) {
-        if (todos[i].id == req.params.id) {
-            todos[i].title = req.body.title || todos[i].title;
-            todo = todos[i];
+    console.log(req.body.word);
+
+    for (let i = 1; i < data.length; i++) {
+        if (data[i].id === req.body.word.id) {
+            data[i] = req.body.word;
+            word = data[i];
         }
     }
 
-    if (!todo) return res.sendStatus(404);
+    if (!word) return res.sendStatus(404);
 
-    updateTodosFile(todos);
+    updateJSON(data);
 
-    res.json(todo);
+    res.json(word);
 });
 
-app.patch('/api/todos/:id', (req, res) => {
-    let todo;
+app.patch('/api/words/:id', (req, res) => {
+    let word;
 
-    for (let i = 1; i < todos.length; i++) {
-        if (todos[i].id == req.params.id) {
-            todos[i].completed = !todos[i].completed;
-            todo = todos[i];
+    for (let i = 1; i < data.length; i++) {
+        if (data[i].id === parseInt(req.params.id)) {
+            data[i].hard = !data[i].hard;
+            word = data[i];
         }
     }
 
-    if (!todo) return res.sendStatus(404);
+    console.log(`Word №${word.id}, hard: ${word.hard}`);
 
-    updateTodosFile(todos);
+    if (!word) return res.sendStatus(404);
 
-    res.json(todo);
+    updateJSON(data);
+
+    res.json(word);
 });
 
-app.delete('/api/todos/:id', (req, res) => {
-    const index = todos.findIndex(todo => todo.id == req.params.id);
+app.delete('/api/words/:id', (req, res) => {
+    const index = data.findIndex(word => word.id == req.params.id);
+    const id = req.params.id;
 
     if (index === -1) return res.sendStatus(404);
 
-    todos.splice(index, 1);
+    data.splice(index, 1);
 
-    updateTodosFile(todos);
+    for (let i = index; i < data.length; i++) {
+        data[i].id = data[i].id - 1;
+    }
+    
+    updateJSON(data);
 
     res.sendStatus(204);
 });

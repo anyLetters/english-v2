@@ -1,19 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Navigation from '../Navigation/Navigation.js';
-import ToggleInputs from '../ToggleInputs/ToggleInputs.js';
-import FilterContainer from '../../containers/FilterContainer.js';
+import PrimaryForm from '../PrimaryForm/PrimaryForm.js';
+import Filter from '../../containers/FilterContainer.js';
 import ToggleMode from '../ToggleMode/ToggleMode.js';
+import Stats from '../Stats/Stats.js';
+import Search from '../../containers/SearchContainer.js';
 
 export default function Menu(props) {
-    // console.log(props);
     return (
-        <div style={{border: '2px solid black'}}>
-            <Link to='/'>HOME</Link>
-            <Navigation match={props.match} />
-            <ToggleInputs history={props.history} />
-            <FilterContainer />
-            <ToggleMode onToggleMode={props.onToggleMode} mode={props.mode} />
-        </div>
+        <header className='header'>
+            <div className='menu header__menu'>
+                <Navigation match={props.match} />
+                <PrimaryForm history={props.history} />
+                <ToggleMode onToggleMode={props.onToggleMode} mode={props.mode} />
+                <Filter />
+                <Search />
+                <Stats count={props.count}/>
+            </div>
+        </header>
     )
 }
+
+Menu.propTypes = {
+    filter: PropTypes.object.isRequired,
+    mode: PropTypes.string.isRequired,
+    count: PropTypes.number,
+    onChangeKeywordFilter: PropTypes.func.isRequired,
+    onToggleMode: PropTypes.func.isRequired
+};

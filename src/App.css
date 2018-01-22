@@ -1,0 +1,20 @@
+@import url(normalize.css);
+@import url(./components/Menu/style.css);
+@import url(./components/PrimaryForm/style.css);
+@import url(./components/ToggleMode/style.css);
+@import url(./components/Filter/style.css);
+@import url(./components/Search/style.css);
+@import url(./components/Stats/style.css);
+@import url(./components/Card/style.css);
+@import url(./components/List/style.css);
+@import url(./components/UI/List/style.css);
+@import url(./components/HomePage/style.css);
+html, body {
+  background-color: #eeeeee;
+  height: 100%;
+  width: 100%; }
+
+.App, #root {
+  height: 100%;
+  width: 100%;
+  min-width: 1225px; }

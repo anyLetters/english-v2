@@ -1,0 +1,6 @@
+.card-container {
+  display: flex;
+  min-height: 400px;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 158px); }
