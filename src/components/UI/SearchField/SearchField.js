@@ -35,7 +35,7 @@ class SearchField extends React.Component {
                     id="search"
                     label="Search field"
                     type="search"
-                    placeholder='U can use ! or @. Try it.'
+                    placeholder='! - exact match, @ - date'
                     defaultValue={keyword}
                     onChange={this.handleChange}
                     className={classes.textField}

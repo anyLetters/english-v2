@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import Button from 'material-ui/Button';
 import Input, { InputLabel } from 'material-ui/Input';
 import IconButton from 'material-ui/IconButton';
@@ -63,7 +64,7 @@ class FormDialog extends Component {
             rus: props.word.rus,
             hard: props.word.hard !== undefined ? props.word.hard : false,
             translations,
-            error: '',
+            error: null,
             open: props.open,
             action: props.action
         };
@@ -117,23 +118,14 @@ class FormDialog extends Component {
 
     validations(event) {
         event.preventDefault();
-        let error = '';
+        let error = null;
 
-        this.setState({error: ''});
+        this.setState({error: null});
 
-        if (!this.state.eng) {
-            this.setState({error: '"Original word" field is empty'})
-            return;
-        }
-
-        if (!this.state.rus) {
-            this.setState({error: '"Translation" field is empty'})
-            return;
-        }
+        if (/\d/.test(this.state.rus)) error = 'translation';
 
         Object.entries(this.state.translations).forEach(pos => {
-            if (/\d/.test(pos[1])) error = `"${pos[0]}" contains numbers`;
-            if (!pos[1].length) error = `"${pos[0]}" field is empty`;
+            if (/\d/.test(pos[1])) error = `${pos[0]}`;
         });
 
         error ? this.setState({error}) : this.handleSubmit();
@@ -173,17 +165,13 @@ class FormDialog extends Component {
     }
 
     addField() {
+        const trans = this.state.translations;
         const POSNames = [
             'noun', 'verb', 'adverb', 'adjective', 'pronoun', 
             'particle', 'preposition', 'conjuction', 'interjection'
         ];
 
-        let selectJSX = POSNames.map((pos, index) => {
-            if(this.state.translations[pos] === undefined) {
-                return pos;
-            }
-            return null;
-        }).filter(n => n);
+        let selectJSX = _.filter(POSNames, pos => _.isUndefined(trans[pos]));
 
         return (
             <Select onChange={this.handleChangeSelect}>{selectJSX}</Select>
@@ -205,7 +193,7 @@ class FormDialog extends Component {
                     />
                 </FormControl>
                 
-                <FormControl margin='dense' required>
+                <FormControl margin='dense' required error={this.state.error === 'translation'}>
                     <InputLabel 
                         FormControlClasses={{
                             focused: classes.inputLabelFocused,
@@ -241,11 +229,17 @@ class FormDialog extends Component {
         return Object.entries(this.state.translations).map((pos, index) => {
             return (
                 <div key={index} className={classes.formControl}>
-                    <FormControl margin='dense' required fullWidth={true}>
-                        <InputLabel 
-                            FormControlClasses={{
-                                focused: classes.inputLabelFocused,
-                            }}>{pos[0]}</InputLabel>
+                    <FormControl 
+                        margin='dense' 
+                        required 
+                        fullWidth={true} 
+                        error={this.state.error === pos[0]}
+                    >
+                        <InputLabel FormControlClasses={{
+                            focused: classes.inputLabelFocused}}
+                        >
+                            {pos[0]}
+                        </InputLabel>
                         <Input
                             classes={{inkbar: classes.inputInkbar, formControl: classes.formControl}}
                             multiline={true}

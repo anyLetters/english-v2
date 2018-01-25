@@ -6,13 +6,13 @@ import Table, {
     TableCell,
     TableFooter,
     TableHead,
-    // TablePagination,
     TableRow,
 } from 'material-ui/Table';
 import Popover from './Popover.js';
 import Paper from 'material-ui/Paper';
 import Pagination from '../Pagination/Pagination.js';
 import { Link } from 'react-router-dom';
+import RowsPerPage from './RowsPerPage.js'
 
 const styles = theme => ({
     root: {
@@ -106,8 +106,8 @@ class EnhancedTable extends React.Component {
         };
     }
 
-    handleChangePage = (page) => {
-        this.props.onPageChange({selected: page});
+    handleChangePage = page => {
+        this.props.onPageChange(page);
     };
 
     handleChangeRowsPerPage = event => {
@@ -116,8 +116,8 @@ class EnhancedTable extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { data, selected, pageCount, rows } = this.props;
-        const emptyRows = rows - Math.min(rows, (pageCount - (selected - 1)) * rows);
+        const { data, currentPage, pageCount, rows } = this.props;
+        const emptyRows = rows - Math.min(rows, ((pageCount - currentPage) * rows));
 
         return (
             <Paper className={classes.root}>
@@ -172,10 +172,16 @@ class EnhancedTable extends React.Component {
                     <TableFooter>
                         <TableRow className={classes.tableFooter}>
                             <TableCell className='tableCellPagination'>
-                                <Pagination
-                                    totalPages={pageCount}
-                                    currentPage={selected}
-                                    onChange={this.handleChangePage}/>
+                                <div className='list-bottom'>
+                                    <Pagination
+                                        totalPages={pageCount}
+                                        currentPage={currentPage + 1}
+                                        onChange={this.handleChangePage}/>
+                                    <RowsPerPage
+                                        options={[10, 15, 20, 25, 30, 40, 50]}
+                                        rows={rows}
+                                        onChange={this.handleChangeRowsPerPage}/>
+                                </div>
                             </TableCell>
                         </TableRow>
                     </TableFooter>

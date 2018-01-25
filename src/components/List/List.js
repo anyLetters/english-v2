@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import Loading from '../UI/Loading/Loading.js';
 import Table from '../UI/List/List.js';
 import NotFound from '../NotFound/NotFound.js';
+import _ from 'lodash';
 
 export default class List extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             data: [],
-            offset: 0,
-            selected: 1,
+            currentPage: 0,
             rows: 15,
             pageCount: Math.ceil(props.data.length / 15)
         };
@@ -20,23 +21,31 @@ export default class List extends Component {
         this.handleRowsChange = this.handleRowsChange.bind(this);
     }
 
-    handlePageClick(data) {
-        let selected = data.selected;
-        let offset = Math.ceil((selected - 1) * this.state.rows);
-        this.setState({offset, selected}, () => this.paginateData());
+    handlePageClick(currentPage) {
+        this.setState({currentPage: currentPage - 1}, () => this.paginateData());
     }
 
-    handleRowsChange(rows) {
-        this.setState({rows}, () => this.paginateData());
+    handleRowsChange(value) {
+        let newRows = value;
+        let {currentPage, rows} = this.state;
+        let newPage = Math.floor((currentPage * rows) / newRows);
+    
+        this.setState({
+            rows: newRows,
+            currentPage: newPage,
+        }, () => this.paginateData());
     }
 
     paginateData(nextProps) {
+        let { currentPage, rows } = this.state;
+        let offset = currentPage * rows;
+
         if (nextProps) {
-            const data = nextProps.data.slice(0, this.state.rows);
-            this.setState({data, offset: 0, pageCount: Math.ceil(nextProps.data.length / this.state.rows)});
+            const data = nextProps.data.slice(0, rows);
+            this.setState({data, currentPage, pageCount: Math.ceil(nextProps.data.length / rows)});
         } else {
-            const data = this.props.data.slice(this.state.offset, this.state.offset + this.state.rows);
-            this.setState({data, pageCount: Math.ceil(this.props.data.length / this.state.rows)});
+            const data = this.props.data.slice(offset, offset + rows);
+            this.setState({data, currentPage, pageCount: Math.ceil(this.props.data.length / rows)});
         }
     }
 
@@ -45,18 +54,17 @@ export default class List extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({selected: 1}, () => this.paginateData(nextProps));
+        this.setState({currentPage: 0}, () => this.paginateData(nextProps));
     }
 
     render() {
         if (!this.props.fetching) {
-            if (!this.state.data.length) return <NotFound/>
-
+            if (_.isEmpty(this.state.data) || this.state.currentPage > this.state.pageCount) return <NotFound/>;
             return (
                 <div className='list-container'>
-                    <Table 
+                    <Table
                         data={this.state.data}
-                        selected={this.state.selected}
+                        currentPage={this.state.currentPage}
                         pageCount={this.state.pageCount}
                         onPageChange={this.handlePageClick}
                         onRowsChange={this.handleRowsChange}

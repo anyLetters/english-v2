@@ -8,19 +8,19 @@ import NavigationChevronRight from 'material-ui-icons/ChevronRight';
 
 const ButtonStyle = {
   default: {
-    minWidth: 37,
-    color: '#757575'
+      minWidth: 38,
+      color: '#757575'
   },
   active: {
-    minWidth: 37,
-    backgroundColor: '#1E88E5',
-    color: 'white'
+      minWidth: 38,
+      backgroundColor: '#EEEEEE',
+      color: '#1E88E5'
   }
 };
 
 const IconStyle = {
-  maxWidth: 16,
-  maxHeight: 16,
+    maxWidth: 16,
+    maxHeight: 16,
 };
 
 const Page = ({value, isActive, onClick}) => (

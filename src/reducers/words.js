@@ -37,7 +37,7 @@ export default function reducer(state = [], action) {
 
         case DELETE_WORD:
             const index = state.findIndex(word => word.id === action.id);
-            console.log(action)
+            
             return [
                 ...state.slice(0, index),
                 ...state.slice(index + 1)

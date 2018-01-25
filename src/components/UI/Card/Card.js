@@ -22,15 +22,17 @@ const styles = theme => ({
         justifyContent: 'space-between'
     },
     cardContent: {
-        marginTop: theme.spacing.unit*6.5,
-        // margin: theme.spacing.unit*3,
-        textAlign: 'center'
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%'
     },
     hardOn: {
         color: '#ef5350'
     },
     headline: {
-        fontSize: 46,
+        fontSize: 52,
         fontWeight: 300,
         lineHeight: 1.1
     },
@@ -97,19 +99,19 @@ class CardUI extends React.Component {
         return (
             <div>
                 <Card className={classes.card}>
-                    <CardContent style={{padding: 0}}>
-                        <div style={{
-                            display: 'flex', 
-                            justifyContent: 'space-between', 
-                            backgroundColor: '#F5F5F5',
-                            borderBottom: '1px solid #E0E0E0'
-                        }}>
-                            <Typography className={classes.title}>No. {word.id}</Typography>
-                            
-                            <Typography className={classes.title}>
-                                {created_at}
-                            </Typography>
-                        </div>
+                    <div style={{
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        backgroundColor: '#F5F5F5',
+                        borderBottom: '1px solid #E0E0E0'
+                    }}>
+                        <Typography className={classes.title}>No. {word.id}</Typography>
+                        
+                        <Typography className={classes.title}>
+                            {created_at}
+                        </Typography>
+                    </div>
+                    <CardContent>
                         <div className={classes.cardContent}>
                             <Typography className={classes.headline} type="headline" component="h2">
                                 {this.state.toggleLang ? word.rus : word.eng}

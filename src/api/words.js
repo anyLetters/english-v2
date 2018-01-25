@@ -1,4 +1,4 @@
-import { apiYandex, apiOxford } from './secrets.js';
+import { apiYandex } from './secrets.js';
 import axios from 'axios';
 
 function _formatYandexDictionaryResponse(data) {

@@ -26,10 +26,8 @@ const getWordsFilteredByKeyword = (words, selectedKeyword) => {
 }
 
 const getWordsFilteredByCharacters = (words, selectedCharacters) => {
-    if (typeof selectedCharacters[0] !== 'undefined' && selectedCharacters[0] !== '') {
-        return _.filter(
-            words,
-            word => {
+    if (selectedCharacters[0]) {
+        return _.filter(words, word => {
                 for (let i = 0; i <= selectedCharacters.length; i++) {
                     if(word.eng[0] === selectedCharacters[i]) return true;
                 }
@@ -41,13 +39,7 @@ const getWordsFilteredByCharacters = (words, selectedCharacters) => {
 }
 
 const getWordsFilteredByHard = (words, selectedHard) => {
-    if (selectedHard === true) {
-        return _.filter(words, word => {
-            return word.hard === selectedHard;
-        })
-    } else {
-        return words;
-    }
+    return selectedHard ? _.filter(words, 'hard') : words;
 }
 
 const getVisibleWordsFilteredByCharacters = createSelector(

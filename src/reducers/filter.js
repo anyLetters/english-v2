@@ -2,7 +2,7 @@ import { SET_KEYWORD_FILTER, SET_CHARACTERS_FILTER, TOGGLE_HARD_FILTER } from '.
 
 const initialState = {
     keyword: '',
-    characters: [],
+    characters: [''],
     hard: false
 };
 

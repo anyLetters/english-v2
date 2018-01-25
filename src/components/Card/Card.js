@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import Loading from '../UI/Loading/Loading.js';
 import CardUI from '../UI/Card/Card.js';
 import NotFound from '../NotFound/NotFound.js';
+import _ from 'lodash';
 
 export default class Card extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            word: props.data[Math.floor(Math.random() * (props.data.length - 0) ) + 0],
+            word: _.sample(props.data),
             mode: props.mode,
             offset: 0
         };
-        
+
         this.getNextWord = this.getNextWord.bind(this);
     }
 
@@ -20,7 +22,7 @@ export default class Card extends Component {
         if (this.state.mode === 'RANDOM') {
             this.setState({offset: 0});
             this.setState({
-                word: this.props.data[Math.floor(Math.random() * (this.props.data.length - 0) ) + 0]
+                word: _.sample(this.props.data)
             });
         } else if (this.state.mode === 'SERIAL') {
             let offset = this.state.offset;
@@ -39,17 +41,17 @@ export default class Card extends Component {
             this.setState({ mode: props.mode });
         }
         if (this.state.mode === props.mode) {
-            this.setState({ word: props.data[Math.floor(Math.random() * (props.data.length - 0) ) + 0] });
+            this.setState({ word: _.sample(props.data)});
             if (this.state.mode === 'SERIAL') this.setState({offset: 0});
         }
         if (!props.data.length) {
-            this.setState({ word: 'NOT FOUND' });
+            this.setState({ word: null });
         }
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (nextProps.data.length !== 0 && this.state.word) {
-            const index = nextProps.data.findIndex(word => word.id === this.state.word.id);
+        if (!_.isLength(nextProps.data) && this.state.word) {
+            const index = _.findIndex(nextProps.data, ['id', this.state.word.id])
             if (index >= 0) {
                 if (nextProps.data[index].hard !== this.state.word.hard) {
                     nextState.word = nextProps.data[index];
@@ -60,14 +62,13 @@ export default class Card extends Component {
 
     render() {
         if (!this.props.fetching) {
-            if (this.state.word !== 'NOT FOUND' && typeof this.state.word !== 'undefined') {
+            if (!_.isNull(this.state.word)) {
                 return (
                     <div className='card-container'>
                         <CardUI 
                             word={this.state.word} 
                             next={this.getNextWord}
                             sayThis={this.handleSay}
-                            amount={this.props.data.length}
                             toggleHard={this.props.onToggleHard}/>
                     </div>
                 )
@@ -86,4 +87,3 @@ Card.propTypes = {
     fetching: PropTypes.bool.isRequired,
     onToggleHard: PropTypes.func.isRequired
 };
-
