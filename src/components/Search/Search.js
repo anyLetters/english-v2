@@ -20,9 +20,9 @@ export default class Search extends Component {
     render() {
         return (
             <div className='search menu__element'>
-                <SearchField keyword={this.state.keyword} onChange={this.handleChange}  />
+                <SearchField keyword={this.state.keyword} onChange={this.handleChange} />
             </div>
-        )
+        );
     }
 }
 

@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import StatsUI from '../UI/Stats/Stats.js';
 
-export default class Stats extends Component {
-    render() {
-        return (
-            <div className='stats menu__element'>
-                <StatsUI total={this.props.count}/>
-            </div>
-        )
-    }
+export default function Stats(props) {
+    return (
+        <div className='stats menu__element'>
+            <StatsUI total={props.total} totalHardWords={props.totalHardWords} />
+        </div>
+    );
 }

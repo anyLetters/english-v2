@@ -7,7 +7,7 @@ import Typography from 'material-ui/Typography';
 import Popover from './Popover.js';
 import LinkButton from '../Buttons/Link/Link.js';
 import Speak from 'material-ui-icons/VolumeUp';
-import Hard from 'material-ui-icons/PriorityHigh';
+import Hard from 'material-ui-icons/Flag';
 import IconButton from 'material-ui/IconButton';
 import Switch from 'material-ui/Switch';
 import blue from 'material-ui/colors/blue';
@@ -74,7 +74,7 @@ class CardUI extends React.Component {
         super();
 
         this.state = {
-            toggleLang: false
+            toggle: false
         };
     }
 
@@ -84,7 +84,7 @@ class CardUI extends React.Component {
 
     onToggleHard = id => {
         this.props.toggleHard(id);
-    }
+    };
 
     render() {
         const { classes, word, next } = this.props;
@@ -114,19 +114,19 @@ class CardUI extends React.Component {
                     <CardContent>
                         <div className={classes.cardContent}>
                             <Typography className={classes.headline} type="headline" component="h2">
-                                {this.state.toggleLang ? word.rus : word.eng}
+                                {this.state.toggle ? word.rus : word.eng}
                             </Typography>
                             <Typography component='span' className={classes.pos}>{partsOfSpeech}</Typography>
                         </div>
                     </CardContent>
                     <CardActions className={classes.actionsButtons}>
-                        <LinkButton to={`/words/${word.id}/show`}>more</LinkButton>
+                        <LinkButton to={`/words/${word.id}/word`}>more</LinkButton>
                         <IconButton onClick={() => this.onToggleHard(word.id)}>
                             <Hard className={word.hard ? classes.hardOn : null}/>
                         </IconButton>
-                        <Switch checked={this.state.toggleLang}
+                        <Switch checked={this.state.toggle}
                                 classes={{checked: classes.checked, bar: classes.bar}}
-                                onChange={this.handleChange('toggleLang')}/>
+                                onChange={this.handleChange('toggle')}/>
                         <IconButton>
                             <Speak className={classes.icon} onClick={() => {
                                 window.responsiveVoice.speak(word.eng, 'US English Male')

@@ -2,8 +2,8 @@ import React from 'react';
 import MenuContainer from '../../containers/MenuContainer.js';
 import ListContainer from '../../containers/ListContainer.js';
 import CardContainer from '../../containers/CardContainer.js';
-import ShowContainer from '../../containers/ShowContainer.js';
-import { Route, Switch } from 'react-router-dom';
+import WordContainer from '../../containers/WordContainer.js';
+import {Route, Switch} from 'react-router-dom';
 
 export default function WordsPage({match}) {
     return (
@@ -12,8 +12,8 @@ export default function WordsPage({match}) {
             <Switch>
                 <Route path={`${match.url}/card`} component={CardContainer} />
                 <Route path={`${match.url}/list`} component={ListContainer} />
-                <Route path={`${match.url}/:id/show`} component={ShowContainer} /> 
+                <Route path={`${match.url}/:id/word`} component={WordContainer} />
             </Switch>
         </div>
-    )
+    );
 }

@@ -20,7 +20,7 @@ export default class ToggleMode extends Component {
             <div className='toggle-block'>
                 <Radio mode={this.state.mode} onChange={this.handleChange} />
             </div>
-        )
+        );
     }
 }
 

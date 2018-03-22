@@ -17,49 +17,51 @@ export default class PrimaryForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.renderPrimaryForm = this.renderPrimaryForm.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.handleCleanErrors = this.handleCleanErrors.bind(this);
+        this.cleanAnErrors = this.cleanAnErrors.bind(this);
+        this.isValid = this.isValid.bind(this);
     }
 
-    handleSubmit(res) {
-        let error;
-        this.handleCleanErrors();
-        
-        let word = res;
-        let isAlreadyAdded = false;
-        let containsOtherSymbols = !/^[a-zA-Z\s]+$/.test(word);
-
-        store.getState().words.forEach(element => {
-            if (element.eng.toLowerCase().trim() === word.toLowerCase()) {
-                isAlreadyAdded = true;
-            }
-        });
-
-        if (!containsOtherSymbols && !isAlreadyAdded) {
+    handleSubmit(word) {
+        if (this.isValid(word)) {
             ApiWords.fetchWord(word).then(word => {
                 this.setState({isFormDialogActive: true, word});
             }).catch(err => {
-                error = err.message;
-                this.setState({error});
+                this.setState({error: err.message});
             });
-        } else {
-            if (isAlreadyAdded) error = 'Already added';
-            if (containsOtherSymbols) error = 'Only Latin characters';
-            this.setState({error});
         }
     }
 
-    handleCleanErrors() {
+    isValid(word) {
+        this.cleanAnErrors();
+        let valid = true;
+
+        if (!/^[a-zA-Z\s]+$/.test(word)) {
+            this.setState({error: 'Only Latin characters'});
+            valid = false;
+        }
+
+        store.getState().words.forEach(w => {
+            if (w.eng.toLowerCase().trim() === word.toLowerCase()) {
+                this.setState({error: 'Already added'});
+                valid = false;
+            }
+        });
+
+        return valid;
+    }
+
+    cleanAnErrors() {
         this.setState({error: null});
     }
 
     handleClose() {
-        this.setState({isFormDialogActive: false, word: null })
+        this.setState({isFormDialogActive: false, word: null });
     }
 
     renderPrimaryForm() {
-        return <PrimaryFormUI 
-                    onSubmit={this.handleSubmit} 
-                    cleanErrors={this.handleCleanErrors}
+        return <PrimaryFormUI
+                    onSubmit={this.handleSubmit}
+                    cleanErrors={this.cleanAnErrors}
                     error={this.state.error}/>;
     }
 
@@ -69,7 +71,7 @@ export default class PrimaryForm extends Component {
                 <div className='primary-form'>
                     {this.renderPrimaryForm()}
                 </div>
-            )
+            );
         } else {
             return (
                 <div className='primary-form'>
@@ -81,7 +83,7 @@ export default class PrimaryForm extends Component {
                         onSubmit={this.handleSubmit}
                         action='add' />
                 </div>
-            )
+            );
         }
     }
 }

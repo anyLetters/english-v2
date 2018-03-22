@@ -6,7 +6,8 @@ function mapStateToProps(state) {
     return {
         filter: state.filter,
         mode: state.mode,
-        count: state.words.length
+        total: state.words.length,
+        totalHardWords: state.words.filter(word => word.hard).length
     };
 }
 

@@ -5,7 +5,7 @@ import getVisibleWords from '../selectors/selectedWords';
 
 function mapStateToProps(state) {
     return {
-        data: getVisibleWords(state),
+        words: getVisibleWords(state),
         mode: state.mode,
         fetching: state.fetching
     };

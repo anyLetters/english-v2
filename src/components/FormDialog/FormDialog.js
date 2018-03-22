@@ -11,12 +11,12 @@ import { withStyles } from 'material-ui/styles';
 import color from '../../themeColors.js';
 import {
     FormControl,
-    FormControlLabel,
+    FormControlLabel
 } from 'material-ui/Form';
 import Dialog, {
     DialogActions,
     DialogContent,
-    DialogTitle,
+    DialogTitle
 } from 'material-ui/Dialog';
 
 const styles = theme => ({
@@ -32,20 +32,27 @@ const styles = theme => ({
         height: 24,
         width: 24
     },
-    inputField: {
+    inputWord: {
+        width: '50%',
         marginRight: theme.spacing.unit
+    },
+    inputTranslation: {
+        marginRight: theme.spacing.unit,
+        width: '50%'
     },
     inputInkbar: {
         '&:after': {
-            backgroundColor: color.blue[700],
-        },
+            backgroundColor: color.blue[600]
+        }
     },
     inputLabelFocused: {
-        color: color.blue[700],
+        color: color.grey[700]
     },
     checkbox: {
-        marginLeft: theme.spacing.unit*4,
-        color: color.blue[700]
+        color: color.blue[600]
+    },
+    rootHard: {
+        paddingLeft: theme.spacing.unit*2
     }
 });
 
@@ -62,14 +69,14 @@ class FormDialog extends Component {
         this.state = {
             eng: props.word.eng,
             rus: props.word.rus,
-            hard: props.word.hard !== undefined ? props.word.hard : false,
+            hard: props.word.hard || false,
             translations,
             error: null,
             open: props.open,
             action: props.action
         };
 
-        this.validations = this.validations.bind(this);
+        this.validation = this.validation.bind(this);
         this.handleChangeHard = this.handleChangeHard.bind(this);
         this.handleDeleteField = this.handleDeleteField.bind(this);
         this.handleChangeTranslations = this.handleChangeTranslations.bind(this);
@@ -85,40 +92,40 @@ class FormDialog extends Component {
     handleDeleteField(pos) {
         this.setState({
             translations: Object.assign(
-                {}, 
+                {},
                 this.state.translations,
                 delete this.state.translations[pos]
             )
         });
     }
 
-    handleChangeTranslations(event, pos) {
+    handleChangeTranslations(word, pos) {
         this.setState({
             translations: Object.assign(
-                {}, 
+                {},
                 this.state.translations,
-                {[pos]: event.target.value}
+                {[pos]: word.target.value}
             )
         });
     }
 
-    handleChangeSelect(event) {
+    handleChangeSelect(word) {
         this.setState({
             translations: Object.assign(
-                {}, 
-                this.state.translations, 
-                {[event.pos]: ''}
+                {},
+                this.state.translations,
+                {[word.pos]: ''}
             )
         });
     }
 
-    handleChangeRus(event) {
-        this.setState({rus: event.target.value});
+    handleChangeRus(word) {
+        this.setState({rus: word.target.value});
     }
 
-    validations(event) {
-        event.preventDefault();
-        let error = null;
+    validation(word) {
+        word.preventDefault();
+        let error = false;
 
         this.setState({error: null});
 
@@ -128,7 +135,11 @@ class FormDialog extends Component {
             if (/\d/.test(pos[1])) error = `${pos[0]}`;
         });
 
-        error ? this.setState({error}) : this.handleSubmit();
+        if (error) {
+            this.setState({error});
+        } else {
+            this.handleSubmit();
+        }
     }
 
     handleSubmit() {
@@ -167,7 +178,7 @@ class FormDialog extends Component {
     addField() {
         const trans = this.state.translations;
         const POSNames = [
-            'noun', 'verb', 'adverb', 'adjective', 'pronoun', 
+            'noun', 'verb', 'adverb', 'adjective', 'pronoun',
             'particle', 'preposition', 'conjuction', 'interjection'
         ];
 
@@ -175,51 +186,50 @@ class FormDialog extends Component {
 
         return (
             <Select onChange={this.handleChangeSelect}>{selectJSX}</Select>
-        )
+        );
     }
 
     renderForm() {
         const { classes } = this.props;
-        
+
         return (
             <div>
-                <FormControl margin='dense' className={classes.inputField}>
-                    <InputLabel>Word</InputLabel>
-                    <Input
-                        classes={{inkbar: classes.inputInkbar}}
-                        type="text"
-                        disabled
-                        value={this.state.eng}
-                    />
-                </FormControl>
-                
-                <FormControl margin='dense' required error={this.state.error === 'translation'}>
-                    <InputLabel 
-                        FormControlClasses={{
-                            focused: classes.inputLabelFocused,
-                        }}>Translation</InputLabel>
-                    <Input
-                        classes={{inkbar: classes.inputInkbar}}
-                        type="text"
-                        required
-                        onChange={this.handleChangeRus}
-                        value={this.state.rus}
-                    />
-                </FormControl>
-                
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            className={classes.checkbox}
-                            onChange={this.handleChangeHard} 
-                            checked={this.state.hard}
-                            aria-label="checkedA"/>
-                    }
-                    label="HARD"/>
+                <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+                    <FormControl margin='dense' className={classes.inputWord}>
+                        <InputLabel>Word</InputLabel>
+                        <Input
+                            classes={{inkbar: classes.inputInkbar}}
+                            type="text"
+                            disabled
+                            value={this.state.eng}
+                        />
+                    </FormControl>
 
+                    <FormControl margin='dense' className={classes.inputTranslation} required error={this.state.error === 'translation'}>
+                        <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}}>
+                            Translation
+                        </InputLabel>
+                        <Input
+                            classes={{inkbar: classes.inputInkbar}}
+                            type="text"
+                            required
+                            onChange={this.handleChangeRus}
+                            value={this.state.rus}
+                        />
+                    </FormControl>
+                    <FormControlLabel classes={{root: classes.rootHard}}
+                        control={
+                            <Checkbox
+                                className={classes.checkbox}
+                                onChange={this.handleChangeHard}
+                                checked={this.state.hard}
+                                aria-label="checkedA"/>
+                        }
+                        label="HARD"/>
+                </div>
                 {this.renderTranslations()}
             </div>
-        )
+        );
     }
 
     renderTranslations() {
@@ -229,15 +239,13 @@ class FormDialog extends Component {
         return Object.entries(this.state.translations).map((pos, index) => {
             return (
                 <div key={index} className={classes.formControl}>
-                    <FormControl 
-                        margin='dense' 
-                        required 
-                        fullWidth={true} 
+                    <FormControl
+                        margin='dense'
+                        required
+                        fullWidth={true}
                         error={this.state.error === pos[0]}
                     >
-                        <InputLabel FormControlClasses={{
-                            focused: classes.inputLabelFocused}}
-                        >
+                        <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}}>
                             {pos[0]}
                         </InputLabel>
                         <Input
@@ -252,33 +260,35 @@ class FormDialog extends Component {
                         <DeleteIcon onClick={() => this.handleDeleteField(pos[0])} />
                     </IconButton>
                 </div>
-            )
-        })
+            );
+        });
     }
 
     render() {
         return (
             <div>
                 <Dialog
+                    fullWidth={true}
+                    maxWidth='md'
                     open={this.props.open}
                     onClose={this.props.onClose}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">Word</DialogTitle>
-                    <form onSubmit={this.validations}>
+                    <form onSubmit={this.validation}>
                         <DialogContent>
-                            
+
                             {this.renderForm()}
 
                         </DialogContent>
                         <DialogActions>
-                            {this.addField()}
-                            <Button onClick={this.props.onClose} color="primary">
-                                Cancel
-                            </Button>
-                            <Button type='submit' color="primary">
-                                Save
-                            </Button>
+                                {this.addField()}
+                                <Button onClick={this.props.onClose} color="primary">
+                                    Cancel
+                                </Button>
+                                <Button type='submit' color="primary">
+                                    Save
+                                </Button>
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -292,9 +302,11 @@ FormDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
+    updateParentState: PropTypes.func,
+    classes: PropTypes.object,
     action: PropTypes.string.isRequired,
     onAddWord: PropTypes.func.isRequired,
-    onEditWord: PropTypes.func.isRequired,
+    onEditWord: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(FormDialog);

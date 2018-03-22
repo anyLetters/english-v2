@@ -5,7 +5,6 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import EditButton from '../Buttons/Edit/Edit.js';
 import DeleteButton from '../Buttons/Delete/Delete.js';
-
 import Button from 'material-ui/Button';
 
 const styles = theme => ({

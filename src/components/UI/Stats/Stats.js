@@ -2,31 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { FormLabel, FormControl } from 'material-ui/Form';
-import { InputLabel } from 'material-ui/Input';
+import Typography from 'material-ui/Typography';
 
 const styles = theme => ({
     formControl: {
-        // padding: theme.spacing.unit
         display: 'flex',
         width: '100%',
-        // backgroundColor: '#EEEEEE'
     },
     formLabel: {
         padding: theme.spacing.unit,
-        // borderBottom: '2px solid #EEEEEE',
-        // backgroundColor: blue[400],
         backgroundColor: '#F5F5F5',
-        // color: 'white'
     },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     },
-    inputLabel: {
-        margin: theme.spacing.unit*3,
+    typography: {
         fontSize: 14,
-        // color: blue[400]
-        // color: 'white'
+        color: '#757575'
     }
 });
 
@@ -37,12 +30,15 @@ class Stats extends React.Component {
     };
 
     render() {
-        const { classes, total } = this.props;
+        const { classes, total, totalHardWords } = this.props;
 
         return (
             <FormControl className={classes.formControl}>
                 <FormLabel className={classes.formLabel}>Stats</FormLabel>
-                <InputLabel className={classes.inputLabel}>Total words: {total}</InputLabel>
+                <div style={{padding: 16}}>
+                    <Typography className={classes.typography}>Total words: {total}</Typography>
+                    <Typography className={classes.typography}>Hard: {totalHardWords}</Typography>
+                </div>
             </FormControl>
         );
     }

@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import Radio, { RadioGroup } from 'material-ui/Radio';
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 import grey from 'material-ui/colors/grey';
+import color from '../../../themeColors.js';
 
 const styles = theme => ({
     root: {
@@ -11,24 +12,23 @@ const styles = theme => ({
         width: '100%'
     },
     formControl: {
-        width: '100%'
+        width: '100%',
     },
     formLabel: {
         padding: theme.spacing.unit,
-        // borderBottom: '2px solid #EEEEEE',
-        // backgroundColor: '#42A5F5',
         backgroundColor: '#F5F5F5',
-        // backgroundColor: blue[400],
-        // color: 'white'
+        color: color.grey[600]
     },
     group: {
         marginLeft: theme.spacing.unit*4,
         marginRight: theme.spacing.unit,
         marginTop: theme.spacing.unit*2,
     },
+    formControlLabel: {
+        color: '#757575'    
+    },
     radio: {
         color: grey[400]
-        // color: '#EEEEEE'
     }
 });
 
@@ -37,7 +37,7 @@ class RadioButtonsGroup extends React.Component {
         value: '',
     };
 
-    handleChange = (event, value) => {
+    handleChange = value => {
         this.setState({ value });
     };
 
@@ -53,14 +53,16 @@ class RadioButtonsGroup extends React.Component {
                         value={this.state.value}
                         onChange={this.handleChange}
                     >
-                        <FormControlLabel
+                        <FormControlLabel classes={{label: classes.formControlLabel}}
                             control={<Radio className={classes.radio} 
-                                            checked={mode === 'RANDOM'} value="RANDOM"
+                                            checked={mode === 'RANDOM'} 
+                                            value="RANDOM"
                                             onChange={() => onChange('RANDOM')}/>} 
                             label="Random" />
-                        <FormControlLabel 
+                        <FormControlLabel classes={{label: classes.formControlLabel}}
                             control={<Radio className={classes.radio} 
-                                            checked={mode === 'SERIAL'} value="SERIAL"
+                                            checked={mode === 'SERIAL'} 
+                                            value="SERIAL"
                                             onChange={() => onChange('SERIAL')}/>}
                             label="Serial" />
                     </RadioGroup>

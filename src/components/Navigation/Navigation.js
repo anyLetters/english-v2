@@ -36,7 +36,7 @@ class Navigation extends React.Component {
     }
 
     handleClick(path) {
-        this.setState({path})
+        this.setState({path});
     }
 
     render() {

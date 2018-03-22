@@ -12,7 +12,10 @@ const styles = theme => ({
         '& + $bar': {
             backgroundColor: blue[300]
         },
-    }
+    },
+    formControlLabel: {
+        color: '#757575'    
+    },
 });
 
 class Switchbox extends React.Component {
@@ -24,7 +27,7 @@ class Switchbox extends React.Component {
         const { classes, checked, onChange } = this.props;
 
         return (
-            <FormControlLabel
+            <FormControlLabel classes={{label: classes.formControlLabel}}
                 control={
                     <Switch
                         classes={{

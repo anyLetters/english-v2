@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NotFound(props) {
+export default function NotFound() {
     return (
         <div style={{
             fontFamily: 'Roboto',
@@ -12,5 +12,5 @@ export default function NotFound(props) {
         }}>
             <span>No Results Found :(</span>
         </div>
-    )
+    );
 }

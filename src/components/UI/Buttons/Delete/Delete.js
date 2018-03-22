@@ -7,7 +7,6 @@ import Dialog, {
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
-
 import DeleteIcon from 'material-ui-icons/Delete';
 
 const styles = theme => ({

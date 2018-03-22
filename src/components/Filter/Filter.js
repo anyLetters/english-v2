@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Switchbox from '../UI/Switchbox/Switchbox.js';
 import CharactersFilterField from '../UI/CharactersFilterField/CharactersFilterField.js';
@@ -10,15 +10,15 @@ export default class Filter extends Component {
             characters: props.filter.characters
         };
 
-        this.onCheckboxChange = this.onCheckboxChange.bind(this);
-        this.onChangeInput = this.onChangeInput.bind(this);
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+        this.handleChangeInput = this.handleChangeInput.bind(this);
     }
 
-    onCheckboxChange() {
+    handleCheckboxChange() {
         this.props.onToggleHardFilter();
     }
 
-    onChangeInput(value) {
+    handleChangeInput(value) {
         let characters = value.replace(/[^A-Za-z\s!?]/g,'').split('');
         characters = Array.from(new Set(characters)).toString();
 
@@ -32,12 +32,12 @@ export default class Filter extends Component {
     render() {
         return (
             <div className='filter menu__element'>
-                <CharactersFilterField 
-                    value={this.state.characters} 
-                    onChange={this.onChangeInput} />
-                <Switchbox 
-                    checked={this.props.filter.hard} 
-                    onChange={this.onCheckboxChange} />
+                <CharactersFilterField
+                    value={this.state.characters}
+                    onChange={this.handleChangeInput} />
+                <Switchbox
+                    checked={this.props.filter.hard}
+                    onChange={this.handleCheckboxChange} />
             </div>
         );
     }

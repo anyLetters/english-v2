@@ -1,5 +1,4 @@
 import { apiYandex } from './secrets.js';
-import axios from 'axios';
 
 function _formatYandexDictionaryResponse(data) {
 	let eng = data['def'][0]['text'];
@@ -16,7 +15,7 @@ function _formatYandexDictionaryResponse(data) {
 		words = [];
 	})
 
-	return axios.get('/api/data')
+	return fetch('/api/data')
 		.then(response => response.data)
 		.then(data => {
 			return {

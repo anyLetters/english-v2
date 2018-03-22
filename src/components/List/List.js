@@ -10,67 +10,87 @@ export default class List extends Component {
         super(props);
 
         this.state = {
-            data: [],
-            currentPage: 0,
-            rows: 15,
-            pageCount: Math.ceil(props.data.length / 15)
+            words: [],
+            page: props.page,
+            rows: props.rows,
+            totalPages: Math.ceil(props.words.length / props.rows)
         };
 
         this.handlePageClick = this.handlePageClick.bind(this);
-        this.paginateData = this.paginateData.bind(this);
+        this.pagination = this.pagination.bind(this);
         this.handleRowsChange = this.handleRowsChange.bind(this);
     }
 
-    handlePageClick(currentPage) {
-        this.setState({currentPage: currentPage - 1}, () => this.paginateData());
+    handlePageClick(page) {
+        this.setState({page: page - 1}, () => {
+            this.pagination();
+            this.props.onChangePage(page - 1);
+        });
     }
 
-    handleRowsChange(value) {
-        let newRows = value;
-        let {currentPage, rows} = this.state;
-        let newPage = Math.floor((currentPage * rows) / newRows);
-    
+    handleRowsChange(newRowsNumber) {
+        let {page, rows} = this.state;
+        let newPage = Math.floor((page * rows) / newRowsNumber);
+
         this.setState({
-            rows: newRows,
-            currentPage: newPage,
-        }, () => this.paginateData());
+            rows: newRowsNumber,
+            page: newPage
+        }, () => {
+            this.pagination();
+            this.props.onChangeRows(newRowsNumber);
+            this.props.onChangePage(newPage);
+        });
     }
 
-    paginateData(nextProps) {
-        let { currentPage, rows } = this.state;
-        let offset = currentPage * rows;
+    pagination(nextProps) {
+        let { page, rows } = this.state;
+        let offset = page * rows;
 
         if (nextProps) {
-            const data = nextProps.data.slice(0, rows);
-            this.setState({data, currentPage, pageCount: Math.ceil(nextProps.data.length / rows)});
+            const words = nextProps.words.slice(0, rows);
+            this.setState({words, page, totalPages: Math.ceil(nextProps.words.length / rows)});
+        } else if (page > this.state.totalPages) {
+            const words = this.props.words.slice(0, rows);
+            this.setState({words, page: 0, totalPages: Math.ceil(this.props.words.length / rows)});
         } else {
-            const data = this.props.data.slice(offset, offset + rows);
-            this.setState({data, currentPage, pageCount: Math.ceil(this.props.data.length / rows)});
+            const words = this.props.words.slice(offset, offset + rows);
+            this.setState({words, page, totalPages: Math.ceil(this.props.words.length / rows)});
         }
     }
 
     componentDidMount() {
-        this.paginateData();
+        this.pagination();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({currentPage: 0}, () => this.paginateData(nextProps));
+        if (nextProps.words.length !== this.props.words.length) {
+            this.setState({page: 0}, () => {
+                this.props.onChangePage(0);
+                this.pagination(nextProps);
+            });
+        } else {
+            let { page, rows } = this.state;
+            let offset = page * rows;
+            const words = nextProps.words.slice(offset, offset + rows);
+            this.setState({words});
+        }
     }
 
     render() {
         if (!this.props.fetching) {
-            if (_.isEmpty(this.state.data) || this.state.currentPage > this.state.pageCount) return <NotFound/>;
+            if (_.isEmpty(this.state.words) || this.state.page > this.state.totalPages) return <NotFound/>;
             return (
                 <div className='list-container'>
                     <Table
-                        data={this.state.data}
-                        currentPage={this.state.currentPage}
-                        pageCount={this.state.pageCount}
+                        words={this.state.words}
+                        page={this.state.page}
+                        totalPages={this.state.totalPages}
                         onPageChange={this.handlePageClick}
                         onRowsChange={this.handleRowsChange}
-                        rows={this.state.rows}/>
+                        rows={this.state.rows}
+                        onToggleHard={this.props.onToggleHard}/>
                 </div>
-            )
+            );
         } else {
             return <Loading />;
         }
@@ -78,6 +98,11 @@ export default class List extends Component {
 }
 
 List.propTypes = {
-    data: PropTypes.array.isRequired,
-    fetching: PropTypes.bool.isRequired
+    words: PropTypes.array.isRequired,
+    page: PropTypes.number.isRequired,
+    rows: PropTypes.number.isRequired,
+    fetching: PropTypes.bool.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    onChangeRows: PropTypes.func.isRequired,
+    onToggleHard: PropTypes.func.isRequired
 };

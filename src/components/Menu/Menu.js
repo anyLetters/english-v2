@@ -16,16 +16,20 @@ export default function Menu(props) {
                 <ToggleMode onToggleMode={props.onToggleMode} mode={props.mode} />
                 <Filter />
                 <Search />
-                <Stats count={props.count}/>
+                <Stats total={props.total} totalHardWords={props.totalHardWords} />
             </div>
         </header>
-    )
+    );
 }
 
 Menu.propTypes = {
     filter: PropTypes.object.isRequired,
     mode: PropTypes.string.isRequired,
     count: PropTypes.number,
+    total: PropTypes.number,
+    totalHardWords: PropTypes.number,
+    match: PropTypes.object,
+    history: PropTypes.object,
     onChangeKeywordFilter: PropTypes.func.isRequired,
     onToggleMode: PropTypes.func.isRequired
 };

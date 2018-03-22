@@ -27,7 +27,7 @@ export default function reducer(state = [], action) {
             return action.data;
 
         case ADD_WORD:
-            return [...state, action.word];
+            return [ ...state, action.word ];
 
         case EDIT_WORD:
             return state.map(word => wordReducer(word, action));

@@ -17,16 +17,19 @@ function updateJSON(data) {
 
 // function reSetup(data) {
 //     const newData = data.map(e => {
+//         let date = e.created_at.split('T')[0];
+//         date = date.split('-');
+//         date = `${date[0]}-${+date[1]}-${+date[2]}`;
 //         return {
 //             id: e.id,
 //             eng: e.eng,
 //             rus: e.rus,
 //             hard: false,
-//             translations: JSON.parse(e.translation),
-//             created_at: e.created_at.split('T')[0]
+//             translations: e.translations,
+//             created_at: date
 //         }
 //     });
-//     console.log(newData[555]);
+//     console.log(newData[2225]);
 //     fs.writeFile('./api/data.json', JSON.stringify(newData), (err) => {
 //         if (err) throw err;
 //     });
@@ -55,7 +58,7 @@ app.post('/api/words', (req, res) => {
         rus: req.body.word.rus,
         hard: req.body.word.hard,
         translations: req.body.word.translations,
-        created_at: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
+        created_at: new Date().toISOString().slice(0,10)
     };
 
     console.log(word);

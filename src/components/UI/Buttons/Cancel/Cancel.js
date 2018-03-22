@@ -5,11 +5,11 @@ import Button from 'material-ui/Button';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing.unit
     },
     input: {
-        display: 'none',
-    },
+        display: 'none'
+    }
 });
 
 function RaisedCancelButton(props) {
@@ -25,6 +25,7 @@ function RaisedCancelButton(props) {
 
 RaisedCancelButton.propTypes = {
     classes: PropTypes.object.isRequired,
+    onClick: PropTypes.func
 };
 
 export default withStyles(styles)(RaisedCancelButton);

@@ -12,7 +12,8 @@ import Popover from './Popover.js';
 import Paper from 'material-ui/Paper';
 import Pagination from '../Pagination/Pagination.js';
 import { Link } from 'react-router-dom';
-import RowsPerPage from './RowsPerPage.js'
+import RowsPerPage from './RowsPerPage.js';
+import _ from 'lodash';
 
 const styles = theme => ({
     root: {
@@ -65,7 +66,18 @@ const styles = theme => ({
         width: `10%`,
         backgroundColor: '#FAFAFA',
         textAlign: 'center',
-        borderRight: '2px solid #F5F5F5'
+        borderRight: '2px solid #F5F5F5',
+        cursor: 'pointer'
+    },
+    tableCellIdHard: {
+        backgroundColor: '#FAFAFA',
+        borderRight: '2px solid #F5F5F5',
+        color: '#ef5350',
+        fontWeight: '400',
+        textAlign: 'center',
+        padding: 0,
+        width: `10%`,
+        cursor: 'pointer'
     },
     tableCellEng: {
         padding: 0,
@@ -97,12 +109,12 @@ const styles = theme => ({
     },
 });
 
-class EnhancedTable extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+class _Table extends React.Component {
+    constructor(props) {
+        super(props);
 
         this.state = {
-            data: props.data
+            words: props.words
         };
     }
 
@@ -115,9 +127,8 @@ class EnhancedTable extends React.Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { data, currentPage, pageCount, rows } = this.props;
-        const emptyRows = rows - Math.min(rows, ((pageCount - currentPage) * rows));
+        const { classes, words, page, totalPages, rows, onToggleHard } = this.props;
+        const emptyRows = rows - Math.min(rows, ((totalPages - page) * rows));
 
         return (
             <Paper className={classes.root}>
@@ -131,13 +142,27 @@ class EnhancedTable extends React.Component {
                         </TableRow>
                     </TableHead>
                         <TableBody className={classes.tableBody}>
-                            {data.map(word => {
+                            {words.map(word => {
                                 return (
                                     <TableRow key={word.id} className={classes.tableRow}>
-                                        <TableCell className={classes.tableCellId}>{word.id}</TableCell>
-                                            <TableCell className={classes.tableCellEng}>{word.eng}</TableCell>
+                                        <TableCell className={word.hard ? classes.tableCellIdHard : classes.tableCellId}>
+                                            <a onClick={() => onToggleHard(word.id)}>
+                                                {word.id}
+                                            </a>
+                                        </TableCell>
+                                            <TableCell className={classes.tableCellEng}>
+                                                <a  target='_blank'
+                                                    href={`https://en.oxforddictionaries.com/definition/${word.eng}`}
+                                                    style={{
+                                                        outline: 'none',
+                                                        textDecoration: 'none', 
+                                                        color: 'rgba(0, 0, 0, 0.87)'
+                                                    }}>
+                                                    {word.eng}
+                                                </a>
+                                            </TableCell>
                                             <TableCell className={classes.tableCellRus}>
-                                                <Link to={`/words/${word.id}/show`} style={{
+                                                <Link to={`/words/${word.id}/word`} style={{
                                                     outline: 'none',
                                                     textDecoration: 'none', 
                                                     color: 'rgba(0, 0, 0, 0.87)'
@@ -174,8 +199,8 @@ class EnhancedTable extends React.Component {
                             <TableCell className='tableCellPagination'>
                                 <div className='list-bottom'>
                                     <Pagination
-                                        totalPages={pageCount}
-                                        currentPage={currentPage + 1}
+                                        totalPages={totalPages}
+                                        currentPage={page + 1}
                                         onChange={this.handleChangePage}/>
                                     <RowsPerPage
                                         options={[10, 15, 20, 25, 30, 40, 50]}
@@ -191,8 +216,8 @@ class EnhancedTable extends React.Component {
     }
 }
 
-EnhancedTable.propTypes = {
+_Table.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+export default withStyles(styles)(_Table);

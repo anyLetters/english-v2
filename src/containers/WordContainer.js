@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { deleteWord } from '../actions';
-import ShowPage from '../components/ShowPage/ShowPage.js';
+import Word from '../components/Word/Word.js';
 
 function mapStateToProps(state) {
     return {
-        data: state.words,
+        words: state.words,
         fetching: state.fetching
     };
 }
@@ -15,6 +15,6 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const ShowPageContainer = connect(mapStateToProps, mapDispatchToProps)(ShowPage);
+const WordContainer = connect(mapStateToProps, mapDispatchToProps)(Word);
 
-export default ShowPageContainer;
+export default WordContainer;

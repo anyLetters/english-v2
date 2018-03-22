@@ -13,6 +13,6 @@ export default class HomePage extends Component {
                     <CustomButton label='phrases' />
                 </Link>
             </div>
-        )
+        );
     }
 }

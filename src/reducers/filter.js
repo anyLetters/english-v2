@@ -9,13 +9,13 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch(action.type) {
         case SET_KEYWORD_FILTER:
-            return Object.assign({}, state, action.keyword);
+            return { ...state, ...action.keyword }
 
         case SET_CHARACTERS_FILTER:
-            return Object.assign({}, state, {characters: action.characters});
+            return { ...state, characters: action.characters };
 
         case TOGGLE_HARD_FILTER:
-            return Object.assign({}, state, {hard: !state.hard});
+            return { ...state, hard: !state.hard };
 
         default:
             return state;
