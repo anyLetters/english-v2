@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -62,7 +60,7 @@ app.post('/api/words', (req, res) => {
     };
 
     console.log(word);
-    
+
     data.push(word);
 
     updateJSON(data);
@@ -92,7 +90,7 @@ app.put('/api/words/:id', (req, res) => {
 app.patch('/api/words/:id', (req, res) => {
     let word;
 
-    for (let i = 1; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         if (data[i].id === parseInt(req.params.id)) {
             data[i].hard = !data[i].hard;
             word = data[i];
@@ -119,7 +117,7 @@ app.delete('/api/words/:id', (req, res) => {
     for (let i = index; i < data.length; i++) {
         data[i].id = data[i].id - 1;
     }
-    
+
     updateJSON(data);
 
     res.sendStatus(204);

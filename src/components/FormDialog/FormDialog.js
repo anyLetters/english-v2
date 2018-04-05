@@ -8,53 +8,9 @@ import DeleteIcon from 'material-ui-icons/Clear';
 import Select from '../UI/Selects/Selects.js';
 import Checkbox from 'material-ui/Checkbox';
 import { withStyles } from 'material-ui/styles';
-import color from '../../themeColors.js';
-import {
-    FormControl,
-    FormControlLabel
-} from 'material-ui/Form';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogTitle
-} from 'material-ui/Dialog';
-
-const styles = theme => ({
-    formControl: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        width: '100%'
-    },
-    iconButton: {
-        paddingLeft: theme.spacing.unit,
-        alignSelf: 'flex-end',
-        height: 24,
-        width: 24
-    },
-    inputWord: {
-        width: '50%',
-        marginRight: theme.spacing.unit
-    },
-    inputTranslation: {
-        marginRight: theme.spacing.unit,
-        width: '50%'
-    },
-    inputInkbar: {
-        '&:after': {
-            backgroundColor: color.blue[600]
-        }
-    },
-    inputLabelFocused: {
-        color: color.grey[700]
-    },
-    checkbox: {
-        color: color.blue[600]
-    },
-    rootHard: {
-        paddingLeft: theme.spacing.unit*2
-    }
-});
+import {FormControl, FormControlLabel} from 'material-ui/Form';
+import Dialog, {DialogActions, DialogContent, DialogTitle} from 'material-ui/Dialog';
+import styles from './theme.js';
 
 class FormDialog extends Component {
     constructor(props) {
@@ -81,6 +37,7 @@ class FormDialog extends Component {
         this.handleDeleteField = this.handleDeleteField.bind(this);
         this.handleChangeTranslations = this.handleChangeTranslations.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.handleChangeEng = this.handleChangeEng.bind(this);
         this.handleChangeRus = this.handleChangeRus.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -119,9 +76,14 @@ class FormDialog extends Component {
         });
     }
 
+    handleChangeEng(word) {
+        this.setState({eng: word.target.value});
+    }
+
     handleChangeRus(word) {
         this.setState({rus: word.target.value});
     }
+
 
     validation(word) {
         word.preventDefault();
@@ -149,7 +111,7 @@ class FormDialog extends Component {
         let translations = Object.assign({}, ...this.state.translations);
 
         Object.entries(this.state.translations).forEach(pos => {
-            translations[pos[0]] = pos[1].split(',').map(e => e.trim().toLowerCase());
+            translations[pos[0]] = pos[1].split(',').map(word => word.trim().toLowerCase());
         });
 
         if (this.state.action === 'add') {
@@ -176,13 +138,13 @@ class FormDialog extends Component {
     }
 
     addField() {
-        const trans = this.state.translations;
+        const translations = this.state.translations;
         const POSNames = [
             'noun', 'verb', 'adverb', 'adjective', 'pronoun',
             'particle', 'preposition', 'conjuction', 'interjection'
         ];
 
-        let selectJSX = _.filter(POSNames, pos => _.isUndefined(trans[pos]));
+        let selectJSX = _.filter(POSNames, pos => _.isUndefined(translations[pos]));
 
         return (
             <Select onChange={this.handleChangeSelect}>{selectJSX}</Select>
@@ -194,18 +156,21 @@ class FormDialog extends Component {
 
         return (
             <div>
-                <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+                <div className='form-dialog'>
                     <FormControl margin='dense' className={classes.inputWord}>
                         <InputLabel>Word</InputLabel>
                         <Input
                             classes={{inkbar: classes.inputInkbar}}
                             type="text"
-                            disabled
-                            value={this.state.eng}
-                        />
+                            required
+                            onChange={this.handleChangeEng}
+                            value={this.state.eng}/>
                     </FormControl>
-
-                    <FormControl margin='dense' className={classes.inputTranslation} required error={this.state.error === 'translation'}>
+                    <FormControl
+                        margin='dense'
+                        className={classes.inputTranslation}
+                        required
+                        error={this.state.error === 'translation'}>
                         <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}}>
                             Translation
                         </InputLabel>
@@ -214,10 +179,10 @@ class FormDialog extends Component {
                             type="text"
                             required
                             onChange={this.handleChangeRus}
-                            value={this.state.rus}
-                        />
+                            value={this.state.rus}/>
                     </FormControl>
-                    <FormControlLabel classes={{root: classes.rootHard}}
+                    <FormControlLabel
+                        classes={{root: classes.rootHard}}
                         control={
                             <Checkbox
                                 className={classes.checkbox}

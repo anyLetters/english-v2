@@ -15,7 +15,7 @@ export default class Word extends Component {
             fetchingWords: props.fetching
         };
 
-        this.renderViewer = this.renderViewer.bind(this);
+        this.renderShowcase = this.renderShowcase.bind(this);
         this.history = this.props.history;
         this.showEditForm = this.showEditForm.bind(this);
         this.handleDeleteWord = this.handleDeleteWord.bind(this);
@@ -42,15 +42,9 @@ export default class Word extends Component {
         this.setState({word});
     }
 
-    renderViewer() {
+    renderShowcase() {
         return (
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent:'center',
-                flexDirection: 'column',
-                height: 'calc(100% - 158px)'
-            }}>
+            <div className='showcase'>
                 <_Word
                     word={this.state.word}
                     onEdit={this.showEditForm}
@@ -67,7 +61,7 @@ export default class Word extends Component {
 
     render() {
         if (this.state.word && !this.state.fetchingWords) {
-            return this.renderViewer();
+            return this.renderShowcase();
         } else if (!this.state.word) {
             return <NotFound/>;
         }

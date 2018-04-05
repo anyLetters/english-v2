@@ -7,9 +7,9 @@ const initialState = {
 };
 
 export default function reducer(state = initialState, action) {
-    switch(action.type) {
+    switch (action.type) {
         case SET_KEYWORD_FILTER:
-            return { ...state, ...action.keyword }
+            return { ...state, ...action.keyword };
 
         case SET_CHARACTERS_FILTER:
             return { ...state, characters: action.characters };

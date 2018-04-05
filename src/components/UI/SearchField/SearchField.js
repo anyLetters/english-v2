@@ -17,12 +17,12 @@ const styles = theme => ({
     },
     textField: {
         marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing.unit
     },
     textFieldInput: {
         '&:after': {
             backgroundColor: color.blue[600]
-        },
+        }
     },
     inputFocusedLabel: {
         color: color.grey[600]
@@ -32,7 +32,7 @@ const styles = theme => ({
 class SearchField extends React.Component {
 
     handleChange = event => {
-        this.props.onChange(event.target.value)
+        this.props.onChange(event.target.value);
     };
 
     render() {

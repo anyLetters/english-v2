@@ -4,13 +4,15 @@ import words from './words';
 import filter from './filter';
 import mode from './mode';
 import list from './list';
+import sort from './sort';
 
 const reducer = combineReducers({
     words,
     filter,
     mode,
     fetching,
-    list
+    list,
+    sort
 });
 
 export default reducer;

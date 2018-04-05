@@ -6,6 +6,7 @@ import CharactersFilterField from '../UI/CharactersFilterField/CharactersFilterF
 export default class Filter extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             characters: props.filter.characters
         };

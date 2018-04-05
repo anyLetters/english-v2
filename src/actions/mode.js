@@ -4,5 +4,5 @@ export function toggleMode(mode) {
     return {
         type: TOGGLE_MODE,
         mode
-    }
+    };
 }

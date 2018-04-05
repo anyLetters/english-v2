@@ -5,9 +5,11 @@ import Radio from '../UI/Radio/Radio.js';
 export default class ToggleMode extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             mode: props.mode
         };
+
         this.handleChange = this.handleChange.bind(this);
     }
 

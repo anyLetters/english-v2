@@ -17,7 +17,7 @@ export default class PrimaryForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.renderPrimaryForm = this.renderPrimaryForm.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.cleanAnErrors = this.cleanAnErrors.bind(this);
+        this.cleanErrors = this.cleanErrors.bind(this);
         this.isValid = this.isValid.bind(this);
     }
 
@@ -32,36 +32,33 @@ export default class PrimaryForm extends Component {
     }
 
     isValid(word) {
-        this.cleanAnErrors();
-        let valid = true;
+        this.cleanErrors();
 
         if (!/^[a-zA-Z\s]+$/.test(word)) {
             this.setState({error: 'Only Latin characters'});
-            valid = false;
+            return false;
         }
 
-        store.getState().words.forEach(w => {
-            if (w.eng.toLowerCase().trim() === word.toLowerCase()) {
-                this.setState({error: 'Already added'});
-                valid = false;
-            }
-        });
+        if (store.getState().words.find(w => w.eng.toLowerCase().trim() === word.toLowerCase())) {
+            this.setState({error: 'Already added'});
+            return false;
+        }
 
-        return valid;
+        return true;
     }
 
-    cleanAnErrors() {
+    cleanErrors() {
         this.setState({error: null});
     }
 
     handleClose() {
-        this.setState({isFormDialogActive: false, word: null });
+        this.setState({isFormDialogActive: false, word: null});
     }
 
     renderPrimaryForm() {
         return <PrimaryFormUI
                     onSubmit={this.handleSubmit}
-                    cleanErrors={this.cleanAnErrors}
+                    cleanErrors={this.cleanErrors}
                     error={this.state.error}/>;
     }
 

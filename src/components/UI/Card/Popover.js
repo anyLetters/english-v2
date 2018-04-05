@@ -19,16 +19,16 @@ const styles = theme => ({
         maxWidth: 420
     },
     popover: {
-        pointerEvents: 'none',
+        pointerEvents: 'none'
     },
     popperClose: {
-        pointerEvents: 'none',
-    },
+        pointerEvents: 'none'
+    }
 });
 
 class MouseOverPopover extends React.Component {
     state = {
-        anchorEl: null,
+        anchorEl: null
     };
 
     handlePopoverOpen = event => {
@@ -54,27 +54,27 @@ class MouseOverPopover extends React.Component {
 
         return (
             <span className="wrapper">
-                <Typography 
-                    component='span' 
-                    className={classes.typographyPopover} 
-                    onMouseOver={this.handlePopoverOpen} 
+                <Typography
+                    component='span'
+                    className={classes.typographyPopover}
+                    onMouseOver={this.handlePopoverOpen}
                     onMouseOut={this.handlePopoverClose}>
-                    {`${pos} `} 
+                    {`${pos} `}
                 </Typography>
                 <Popover
                     className={classes.popover}
                     classes={{
-                        paper: classes.paper,
+                        paper: classes.paper
                     }}
                     open={open}
                     anchorEl={anchorEl}
                     anchorOrigin={{
                         vertical: 'bottom',
-                        horizontal: 'left',
+                        horizontal: 'left'
                     }}
                     transformOrigin={{
                         vertical: 'top',
-                        horizontal: 'left',
+                        horizontal: 'left'
                     }}
                     onClose={this.handlePopoverClose}
                     >
@@ -87,6 +87,8 @@ class MouseOverPopover extends React.Component {
 
 MouseOverPopover.propTypes = {
   classes: PropTypes.object.isRequired,
+  words: PropTypes.string.isRequired,
+  pos: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(MouseOverPopover);

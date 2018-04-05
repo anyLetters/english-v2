@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import WordsPage from './components/WordsPage/WordsPage.js';
 import HomePage from './components/HomePage/HomePage.js';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Loading from './components/UI/Loading/Loading.js';
 
-class App extends Component {
+export default class App extends Component {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			fetching: props.fetching
-		}
+		};
 
 		this.renderApp = this.renderApp.bind(this);
 		this.renderLoading = this.renderLoading.bind(this);
@@ -31,7 +32,7 @@ class App extends Component {
 				<Route path='/words' component={WordsPage} />
 				<Route path='/phrases' component={() => (<div>123</div>)} />
 			</Switch>
-		)
+		);
 	}
 
 	renderLoading() {
@@ -44,10 +45,12 @@ class App extends Component {
 				<main className='App'>
 					{!this.state.fetching ? this.renderApp() : this.renderLoading()}
 				</main>
-		 	</Router>
-		)
+			</Router>
+		);
 	}
 }
 
-export default App;
-  
+App.propTypes = {
+	fetching: PropTypes.bool.isRequired,
+	fetchWords: PropTypes.func.isRequired
+};

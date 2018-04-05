@@ -5,11 +5,11 @@ import CustomButton from '../UI/Buttons/Custom/Custom.js';
 export default class HomePage extends Component {
     render() {
         return (
-            <div className='homePage'>
-                <Link to='/words/card' style={{textDecoration: 'none'}}>
+            <div className='homepage'>
+                <Link to='/words/card'>
                     <CustomButton label='words' />
                 </Link>
-                <Link to='/phrases/card' style={{textDecoration: 'none'}}>
+                <Link to='/phrases/card'>
                     <CustomButton label='phrases' />
                 </Link>
             </div>

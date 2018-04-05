@@ -51,7 +51,7 @@ export function toggleHard(id) {
 
 export function deleteWord(id) {
     return axios.delete(`/api/words/${id}`)
-        .then(response => ({
+        .then(() => ({
             type: DELETE_WORD,
             id
         }));

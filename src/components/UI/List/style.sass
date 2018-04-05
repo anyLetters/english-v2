@@ -23,20 +23,33 @@ tbody
     width: 100%
     position: relative
 
-    .list-bottom, 
+    .list-bottom
         display: flex
-        justify-content: center
-
-    div:first-child
-        display: flex
-        justify-content: center
+        justify-content: space-between
         align-items: center
 
-    .rowsPerPage
-        position: absolute
-        right: 0
-        display: flex
-        align-items: center
+        .sort-list
+            display: flex
+            // justify-content: flex-start
+            padding-left: 12px
+            align-items: center
+            flex: 1
+
+        .pagination-list > div
+            display: flex
+            justify-content: center
+            align-items: center
+            margin-left: -12px
+            flex: 1
+
+        .rows-list
+            display: flex
+            align-items: center
+            justify-content: flex-end
+            flex: 1
+            .rowsPerPage
+                display: flex
+                align-items: center
 
 .pos-container
     display: flex
@@ -76,3 +89,12 @@ tr td:last-child
 
 tr th:last-child
     padding: 0 !important
+
+.defaultOrder-button, .nonABCsort, .activeOrder-button, .ABCsort
+    cursor: pointer
+.activeOrder-button, .ABCsort
+    color: #1E88E5
+
+.randomize-button
+    color: #9E9E9E
+    font-weight: 300

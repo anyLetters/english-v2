@@ -43,7 +43,7 @@ const styles = theme => ({
     title: {
         margin: theme.spacing.unit*1.5,
         // fontWeight: 300,
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.secondary
     },
     pos: {
         color: theme.palette.text.secondary,
@@ -64,14 +64,14 @@ const styles = theme => ({
         color: blue[600],
         '& + $bar': {
             backgroundColor: blue[300]
-        },
+        }
     },
     bar: {}
 });
 
 class CardUI extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             toggle: false
@@ -82,17 +82,17 @@ class CardUI extends React.Component {
         this.setState({ [name]: checked });
     };
 
-    onToggleHard = id => {
-        this.props.toggleHard(id);
+    onToggleHard = () => {
+        this.props.toggleHard();
     };
 
     render() {
         const { classes, word, next } = this.props;
-    
+
         const partsOfSpeech = Object.entries(word.translations).map((pos, index) => {
-            return <Popover key={index} words={pos[1].join(', ')} pos={pos[0]}/>
+            return <Popover key={index} words={pos[1].join(', ')} pos={pos[0]}/>;
         });
-    
+
         let created_at = word.created_at.split('-');
         created_at = `${created_at[2]}.${created_at[1]}.${created_at[0]}`;
 
@@ -100,13 +100,12 @@ class CardUI extends React.Component {
             <div>
                 <Card className={classes.card}>
                     <div style={{
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         backgroundColor: '#F5F5F5',
                         borderBottom: '1px solid #E0E0E0'
                     }}>
                         <Typography className={classes.title}>No. {word.id}</Typography>
-                        
                         <Typography className={classes.title}>
                             {created_at}
                         </Typography>
@@ -142,6 +141,9 @@ class CardUI extends React.Component {
 
 CardUI.propTypes = {
     classes: PropTypes.object.isRequired,
+    toggleHard: PropTypes.func.isRequired,
+    word: PropTypes.object.isRequired,
+    next: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(CardUI);

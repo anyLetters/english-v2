@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onChangeKeywordFilter: Keyword => dispatch(setKeywordFilter(Keyword)),
+        onChangeKeywordFilter: keyword => dispatch(setKeywordFilter(keyword)),
         onToggleMode: mode => dispatch(toggleMode(mode))
     };
 }

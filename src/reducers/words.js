@@ -22,7 +22,9 @@ function wordReducer(state = {}, action) {
 }
 
 export default function reducer(state = [], action) {
-    switch(action.type) {
+    const index = state.findIndex(word => word.id === action.id);
+
+    switch (action.type) {
         case GET_WORDS:
             return action.data;
 
@@ -36,8 +38,6 @@ export default function reducer(state = [], action) {
             return state.map(word => wordReducer(word, action));
 
         case DELETE_WORD:
-            const index = state.findIndex(word => word.id === action.id);
-            
             return [
                 ...state.slice(0, index),
                 ...state.slice(index + 1)

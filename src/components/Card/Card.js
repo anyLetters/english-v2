@@ -16,42 +16,54 @@ export default class Card extends Component {
         };
 
         this.getNextWord = this.getNextWord.bind(this);
+        this.handleToggleHard = this.handleToggleHard.bind(this);
     }
 
-    getNextWord() {
-        if (this.state.mode === 'RANDOM') {
-            this.setState({offset: 0});
-            this.setState({word: _.sample(this.props.words)});
-        } else if (this.state.mode === 'SERIAL') {
-            let offset = this.state.offset;
-            this.setState({offset: offset >= this.props.words.length - 1 ? 0 : offset + 1}, () => {
-                this.setState({word: this.props.words[offset]});
-            });
+    getNextWord(nextProps) {
+        const { mode, offset } = this.state;
+        const propWords = nextProps.words ? nextProps.words : this.props.words;
+
+        switch (mode) {
+            case 'RANDOM':
+                this.setState({offset: 0, word: _.sample(propWords)});
+                break;
+            case 'SERIAL':
+                this.setState({offset: offset >= propWords.length - 1 ? 0 : offset + 1, word: propWords[offset]});
+                break;
+            default:
+                return mode;
         }
     }
 
-    componentWillReceiveProps(props) {
-        if (props.words.length) {
-            if (this.state.mode !== props.mode) {
-                this.setState({ mode: props.mode });
+    handleToggleHard() {
+        this.props.onToggleHard(this.state.word.id);
+    }
+
+    isWordHardPropertyHasToggled(nextProps) {
+        const { word } = this.state;
+        const { words } = this.props;
+
+        if (words.length === nextProps.words.length && !_.isEmpty(word)) {
+            const index = _.findIndex(nextProps.words, ['id', word.id]);
+            if (index >= 0 && nextProps.words[index].hard !== word.hard) {
+                this.setState({ word: nextProps.words[index] });
+                return true;
             }
-            if (this.state.mode === props.mode) {
-                this.setState({ word: _.sample(props.words)});
-                if (this.state.mode === 'SERIAL') this.setState({offset: 0});
-            }
+        }
+        return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { mode } = this.state;
+        if (mode !== nextProps.mode) {
+            this.setState({ mode: nextProps.mode });
         } else {
-            this.setState({ word: null });
-        }
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        if (!_.isLength(nextProps.words) && this.state.word) {
-            const index = _.findIndex(nextProps.words, ['id', this.state.word.id]);
-            if (index >= 0) {
-                if (nextProps.words[index].hard !== this.state.word.hard) {
-                    nextState.word = nextProps.words[index];
-                }
+            if (_.isEmpty(nextProps.words)) {
+                this.setState({ word: null });
+                return;
             }
+            if (this.isWordHardPropertyHasToggled(nextProps)) return;
+            this.getNextWord(nextProps);
         }
     }
 
@@ -64,7 +76,7 @@ export default class Card extends Component {
                             word={this.state.word}
                             next={this.getNextWord}
                             sayThis={this.handleSay}
-                            toggleHard={this.props.onToggleHard}/>
+                            toggleHard={this.handleToggleHard}/>
                     </div>
                 );
             } else {

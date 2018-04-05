@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MenuContainer from '../../containers/MenuContainer.js';
 import ListContainer from '../../containers/ListContainer.js';
 import CardContainer from '../../containers/CardContainer.js';
@@ -7,7 +8,7 @@ import {Route, Switch} from 'react-router-dom';
 
 export default function WordsPage({match}) {
     return (
-        <div className='content' style={{height: '100%', width: '100%'}}>
+        <div className='content'>
             <Route path={`${match.url}/*`} component={MenuContainer} />
             <Switch>
                 <Route path={`${match.url}/card`} component={CardContainer} />
@@ -17,3 +18,7 @@ export default function WordsPage({match}) {
         </div>
     );
 }
+
+WordsPage.propTypes = {
+    match: PropTypes.object.isRequired
+};

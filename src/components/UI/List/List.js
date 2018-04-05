@@ -6,23 +6,23 @@ import Table, {
     TableCell,
     TableFooter,
     TableHead,
-    TableRow,
+    TableRow
 } from 'material-ui/Table';
 import Popover from './Popover.js';
 import Paper from 'material-ui/Paper';
 import Pagination from '../Pagination/Pagination.js';
 import { Link } from 'react-router-dom';
 import RowsPerPage from './RowsPerPage.js';
+import Button from 'material-ui/Button';
 import _ from 'lodash';
 
 const styles = theme => ({
     root: {
         width: '70%',
-        marginTop: theme.spacing.unit * 3,
         margin: '0 auto'
     },
     table: {
-        width: '100%',
+        width: '100%'
     },
     tableHeadRow: {
         height: 20,
@@ -63,7 +63,7 @@ const styles = theme => ({
     },
     tableCellId: {
         padding: 0,
-        width: `10%`,
+        width: '10%',
         backgroundColor: '#FAFAFA',
         textAlign: 'center',
         borderRight: '2px solid #F5F5F5',
@@ -76,24 +76,24 @@ const styles = theme => ({
         fontWeight: '400',
         textAlign: 'center',
         padding: 0,
-        width: `10%`,
+        width: '10%',
         cursor: 'pointer'
     },
     tableCellEng: {
         padding: 0,
-        width: `20%`,
+        width: '20%',
         textAlign: 'center',
         borderRight: '2px solid #F5F5F5'
     },
     tableCellRus: {
         padding: 0,
-        width: `20%`,
-        textAlign: 'center',
+        width: '20%',
+        textAlign: 'center'
     },
     tableCellPos: {
         paddingLeft: theme.spacing.unit,
         paddingRight: theme.spacing.unit,
-        width: `50%`,
+        width: '50%',
         borderLeft: '2px solid #F5F5F5'
     },
     tableFooter: {
@@ -105,17 +105,32 @@ const styles = theme => ({
         borderTop: '1px solid #EEEEEE'
     },
     tableWrapper: {
-        overflowX: 'auto',
+        overflowX: 'auto'
     },
+    randomizeButton: {
+        color: '#757575',
+        fontWeight: 300
+    }
 });
 
 class _Table extends React.Component {
-    constructor(props) {
+    constructor(props){
         super(props);
 
         this.state = {
-            words: props.words
+            sortKey: props.sortKey,
+            sortByABC: props.sortByABC
         };
+    }
+
+    handleChangeSortKey = key => {
+        this.props.onChangeSortKey(key);
+        this.setState({sortKey: key});
+    };
+
+    handleToggleABC = () => {
+        this.props.onToggleAlphabeticalOrder();
+        this.setState({sortByABC: !this.state.sortByABC});
     }
 
     handleChangePage = page => {
@@ -123,20 +138,35 @@ class _Table extends React.Component {
     };
 
     handleChangeRowsPerPage = event => {
+        event.preventDefault();
         this.props.onRowsChange(event.target.value);
     };
 
     render() {
         const { classes, words, page, totalPages, rows, onToggleHard } = this.props;
         const emptyRows = rows - Math.min(rows, ((totalPages - page) * rows));
+        const { sortKey, sortByABC } = this.state;
 
         return (
             <Paper className={classes.root}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow className={classes.tableHeadRow}>
-                            <TableCell className={classes.tableHeadCellId} numeric>No.</TableCell>
-                            <TableCell className={classes.tableHeadCellEng}>Word</TableCell>
+                            <TableCell className={classes.tableHeadCellId} numeric>
+                                <a  className={sortKey === 'desc' ?
+                                        'activeOrder-button'
+                                        :
+                                        'defaultOrder-button'}
+                                    onClick={() => this.handleChangeSortKey(sortKey === 'asc' ? 'desc' : 'asc')}>
+                                    No.
+                                </a>
+                            </TableCell>
+                            <TableCell className={classes.tableHeadCellEng}>
+                                <a  className={sortByABC ? 'ABCsort' : 'nonABCsort'}
+                                    onClick={this.handleToggleABC}>
+                                    Word
+                                </a>
+                            </TableCell>
                             <TableCell className={classes.tableHeadCellRus}>Translation</TableCell>
                             <TableCell className={classes.tableHeadCellPos}>Meanings</TableCell>
                         </TableRow>
@@ -176,8 +206,8 @@ class _Table extends React.Component {
                                                     return (
                                                         <div key={index} className='pos-container__wrapper'>
                                                             <div className='pos-container__item'>
-                                                                <Popover 
-                                                                    words={pos[1].join(', ')} 
+                                                                <Popover
+                                                                    words={pos[1].join(', ')}
                                                                     pos={pos[0]}/>
                                                             </div>
                                                         </div>
@@ -198,14 +228,25 @@ class _Table extends React.Component {
                         <TableRow className={classes.tableFooter}>
                             <TableCell className='tableCellPagination'>
                                 <div className='list-bottom'>
-                                    <Pagination
-                                        totalPages={totalPages}
-                                        currentPage={page + 1}
-                                        onChange={this.handleChangePage}/>
-                                    <RowsPerPage
-                                        options={[10, 15, 20, 25, 30, 40, 50]}
-                                        rows={rows}
-                                        onChange={this.handleChangeRowsPerPage}/>
+                                    <div className="sort-list">
+                                        <Button dense
+                                                className={classes.randomizeButton}
+                                                onClick={() => this.handleChangeSortKey('randomized')}>
+                                                RANDOMIZE
+                                        </Button>
+                                    </div>
+                                    <div className="pagination-list">
+                                        <Pagination
+                                            totalPages={totalPages}
+                                            currentPage={page + 1}
+                                            onChange={this.handleChangePage}/>
+                                    </div>
+                                    <div className="rows-list">
+                                        <RowsPerPage
+                                            options={[10, 15, 20, 25, 30, 40, 50]}
+                                            rows={rows}
+                                            onChange={this.handleChangeRowsPerPage}/>
+                                    </div>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -218,6 +259,15 @@ class _Table extends React.Component {
 
 _Table.propTypes = {
     classes: PropTypes.object.isRequired,
+    onToggleAlphabeticalOrder: PropTypes.func.isRequired,
+    onChangeSortKey: PropTypes.func.isRequired,
+    rows: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    words: PropTypes.array.isRequired,
+    onToggleHard: PropTypes.func.isRequired,
+    onRowsChange: PropTypes.func.isRequired,
+    onPageChange: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(_Table);

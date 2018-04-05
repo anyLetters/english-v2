@@ -5,12 +5,12 @@ export function changePage(page) {
     return {
         type: CHANGE_PAGE,
         page
-    }
+    };
 }
 
 export function changeRows(rows) {
     return {
         type: CHANGE_ROWS,
         rows
-    }
+    };
 }

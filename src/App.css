@@ -5,10 +5,15 @@
 @import url(./components/Filter/style.css);
 @import url(./components/Search/style.css);
 @import url(./components/Stats/style.css);
+@import url(./components/Navigation/style.css);
 @import url(./components/Card/style.css);
 @import url(./components/List/style.css);
 @import url(./components/UI/List/style.css);
 @import url(./components/HomePage/style.css);
+@import url(./components/FormDialog/style.css);
+@import url(./components/NotFound/style.css);
+@import url(./components/WordsPage/style.css);
+@import url(./components/Word/style.css);
 html, body {
   background-color: #eeeeee;
   height: 100%;
@@ -18,3 +23,9 @@ html, body {
   height: 100%;
   width: 100%;
   min-width: 1225px; }
+
+a {
+  text-decoration: none; }
+
+::selection {
+  background-color: #E0E0E0; }

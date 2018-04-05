@@ -9,18 +9,18 @@ export function setKeywordFilter(keyword) {
     return {
         type: SET_KEYWORD_FILTER,
         keyword
-    }
+    };
 }
 
 export function setCharactersFilter(characters) {
     return {
         type: SET_CHARACTERS_FILTER,
         characters
-    }
+    };
 }
 
 export function toggleHardFilter() {
     return {
         type: TOGGLE_HARD_FILTER
-    }
+    };
 }

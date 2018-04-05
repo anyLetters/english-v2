@@ -22,57 +22,55 @@ export default class List extends Component {
     }
 
     handlePageClick(page) {
-        this.setState({page: page - 1}, () => {
-            this.pagination();
-            this.props.onChangePage(page - 1);
-        });
+        this.props.onChangePage(page - 1);
+        this.pagination(null, page - 1);
     }
 
     handleRowsChange(newRowsNumber) {
-        let {page, rows} = this.state;
+        let { page, rows } = this.state;
         let newPage = Math.floor((page * rows) / newRowsNumber);
 
-        this.setState({
-            rows: newRowsNumber,
-            page: newPage
-        }, () => {
-            this.pagination();
+        this.setState({ rows: newRowsNumber, page: newPage }, () => {
+            this.pagination(null, newPage);
             this.props.onChangeRows(newRowsNumber);
             this.props.onChangePage(newPage);
         });
     }
 
-    pagination(nextProps) {
-        let { page, rows } = this.state;
+    pagination(nextProps, page) {
+        let { rows } = this.state;
         let offset = page * rows;
 
-        if (nextProps) {
-            const words = nextProps.words.slice(0, rows);
-            this.setState({words, page, totalPages: Math.ceil(nextProps.words.length / rows)});
-        } else if (page > this.state.totalPages) {
-            const words = this.props.words.slice(0, rows);
-            this.setState({words, page: 0, totalPages: Math.ceil(this.props.words.length / rows)});
-        } else {
-            const words = this.props.words.slice(offset, offset + rows);
-            this.setState({words, page, totalPages: Math.ceil(this.props.words.length / rows)});
+        if (!_.isEmpty(this.props.words) || nextProps) {
+            if (nextProps) {
+                const words = nextProps.words.slice(0, rows);
+                this.setState({words, page, totalPages: Math.ceil(nextProps.words.length / rows)});
+            } else {
+                const words = this.props.words.slice(offset, offset + rows);
+                this.setState({words, page, totalPages: Math.ceil(this.props.words.length / rows)});
+            }
         }
     }
 
-    componentDidMount() {
-        this.pagination();
+    componentWillMount() {
+        let { page, rows, totalPages } = this.state;
+        if (page > totalPages) {
+            const words = this.props.words.slice(0, rows);
+            this.setState({words, page: 0, totalPages: Math.ceil(this.props.words.length / rows)});
+        } else {
+            this.pagination(null, page);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.words.length !== this.props.words.length) {
-            this.setState({page: 0}, () => {
-                this.props.onChangePage(0);
-                this.pagination(nextProps);
-            });
+            this.props.onChangePage(0);
+            this.pagination(nextProps, 0);
         } else {
-            let { page, rows } = this.state;
-            let offset = page * rows;
+            let { rows } = this.state;
+            let offset = nextProps.page * rows;
             const words = nextProps.words.slice(offset, offset + rows);
-            this.setState({words});
+            this.setState({words, page: nextProps.page});
         }
     }
 
@@ -88,7 +86,11 @@ export default class List extends Component {
                         onPageChange={this.handlePageClick}
                         onRowsChange={this.handleRowsChange}
                         rows={this.state.rows}
-                        onToggleHard={this.props.onToggleHard}/>
+                        onToggleHard={this.props.onToggleHard}
+                        onChangeSortKey={this.props.onChangeSortKey}
+                        onToggleAlphabeticalOrder={this.props.onToggleAlphabeticalOrder}
+                        sortKey={this.props.sortKey}
+                        sortByABC={this.props.sortByABC}/>
                 </div>
             );
         } else {
@@ -104,5 +106,9 @@ List.propTypes = {
     fetching: PropTypes.bool.isRequired,
     onChangePage: PropTypes.func.isRequired,
     onChangeRows: PropTypes.func.isRequired,
-    onToggleHard: PropTypes.func.isRequired
+    onToggleHard: PropTypes.func.isRequired,
+    onChangeSortKey: PropTypes.func.isRequired,
+    onToggleAlphabeticalOrder: PropTypes.func.isRequired,
+    sortKey: PropTypes.string,
+    sortByABC: PropTypes.bool
 };
