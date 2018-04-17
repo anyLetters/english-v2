@@ -8,31 +8,10 @@ const data = require('./api/data');
 const app = express();
 
 function updateJSON(data) {
-    fs.writeFile('./api/data.json', JSON.stringify(data), (err) => {
-        if (err) throw err;
+    fs.writeFile('./api/data.json', JSON.stringify(data), error => {
+        if (error) throw error;
     });
 };
-
-// function reSetup(data) {
-//     const newData = data.map(e => {
-//         let date = e.created_at.split('T')[0];
-//         date = date.split('-');
-//         date = `${date[0]}-${+date[1]}-${+date[2]}`;
-//         return {
-//             id: e.id,
-//             eng: e.eng,
-//             rus: e.rus,
-//             hard: false,
-//             translations: e.translations,
-//             created_at: date
-//         }
-//     });
-//     console.log(newData[2225]);
-//     fs.writeFile('./api/data.json', JSON.stringify(newData), (err) => {
-//         if (err) throw err;
-//     });
-// }
-// reSetup(data);
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -108,7 +87,6 @@ app.patch('/api/words/:id', (req, res) => {
 
 app.delete('/api/words/:id', (req, res) => {
     const index = data.findIndex(word => word.id == req.params.id);
-    const id = req.params.id;
 
     if (index === -1) return res.sendStatus(404);
 

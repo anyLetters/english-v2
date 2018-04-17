@@ -1,51 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { FormControlLabel } from 'material-ui/Form';
 import Switch from 'material-ui/Switch';
-import blue from 'material-ui/colors/blue';
+import color from '../../../themeColors.js';
 
 const styles = theme => ({
     bar: {},
     checked: {
-        color: blue[600],
+        color: color.grey[50],
         '& + $bar': {
-            backgroundColor: blue[300]
-        },
+            backgroundColor: color.grey[700],
+            opacity: 1
+        }
     },
     formControlLabel: {
-        color: '#757575'    
-    },
+        color: '#757575'
+    }
 });
 
-class Switchbox extends React.Component {
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-    };
-
+class Switchbox extends Component {
     render() {
-        const { classes, checked, onChange } = this.props;
-
-        return (
-            <FormControlLabel classes={{label: classes.formControlLabel}}
-                control={
-                    <Switch
-                        classes={{
-                            checked: classes.checked,
-                            bar: classes.bar,
-                        }}
-                        checked={checked}
-                        onChange={onChange}
-                        aria-label="checkedA"/>
-                }
-                label="Only hard"/>
-            
+        const { classes, checked, onChange, label } = this.props;
+        const SwitchControl = (
+            <Switch classes={{checked: classes.checked, bar: classes.bar}} checked={checked} onChange={onChange}/>
         );
+
+        return label
+        ? <FormControlLabel
+            classes={{label: classes.formControlLabel}}
+            control={SwitchControl}
+            label={label}/>
+        : SwitchControl;
     }
 }
 
 Switchbox.propTypes = {
     classes: PropTypes.object.isRequired,
+    checked: PropTypes.bool,
+    onChange: PropTypes.func,
+    label: PropTypes.string
 };
 
 export default withStyles(styles)(Switchbox);

@@ -75,27 +75,28 @@ export default class List extends Component {
     }
 
     render() {
-        if (!this.props.fetching) {
-            if (_.isEmpty(this.state.words) || this.state.page > this.state.totalPages) return <NotFound/>;
-            return (
-                <div className='list-container'>
-                    <Table
-                        words={this.state.words}
-                        page={this.state.page}
-                        totalPages={this.state.totalPages}
-                        onPageChange={this.handlePageClick}
-                        onRowsChange={this.handleRowsChange}
-                        rows={this.state.rows}
-                        onToggleHard={this.props.onToggleHard}
-                        onChangeSortKey={this.props.onChangeSortKey}
-                        onToggleAlphabeticalOrder={this.props.onToggleAlphabeticalOrder}
-                        sortKey={this.props.sortKey}
-                        sortByABC={this.props.sortByABC}/>
-                </div>
-            );
-        } else {
-            return <Loading />;
-        }
+        const { words, page, totalPages, rows } = this.state;
+        const { fetching, onToggleHard, onChangeSortKey, onToggleAlphabeticalOrder, sortKey, sortByABC } = this.props;
+
+        if (fetching) return <Loading />;
+        if (_.isEmpty(words) || page > totalPages) return <NotFound/>;
+
+        return (
+            <div className='list-container'>
+                <Table
+                    words={words}
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={this.handlePageClick}
+                    onRowsChange={this.handleRowsChange}
+                    rows={rows}
+                    onToggleHard={onToggleHard}
+                    onChangeSortKey={onChangeSortKey}
+                    onToggleAlphabeticalOrder={onToggleAlphabeticalOrder}
+                    sortKey={sortKey}
+                    sortByABC={sortByABC}/>
+            </div>
+        );
     }
 }
 

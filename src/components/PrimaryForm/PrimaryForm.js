@@ -1,21 +1,60 @@
-import React, { Component } from 'react';
-import store from '../../store';
-import ApiWords from '../../api/words';
-import PrimaryFormUI from '../UI/PrimaryForm/PrimaryForm.js';
-import FormDialog from '../../containers/FormContainer.js';
+import {
+    React,
+    Component,
+    PropTypes,
+    withStyles,
+    InputField,
+    ApiWords,
+    store,
+    PopupForm,
+    formStyles
+} from '../../imports.js';
 
-export default class PrimaryForm extends Component {
+class Form extends Component {
+    state = { value: '' };
+
+    handleChangeInput = event => {
+        if (!event.target.value) this.props.cleanErrors();
+        this.setState({ value: event.target.value });
+    };
+
+    handleSubmit = event => {
+        event.preventDefault();
+        this.props.onSubmit(this.state.value);
+
+        setTimeout(() => {
+            if (!this.props.error) this.setState({value: ''});
+        }, 1000);
+    }
+
+    render() {
+        const { classes, error, placeholder, name } = this.props;
+
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <InputField
+                    classes={classes}
+                    placeholder={placeholder}
+                    name={name}
+                    value={this.state.value}
+                    onChange={this.handleChangeInput}
+                    error={error} />
+            </form>
+        );
+    }
+}
+
+class PrimaryForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             error: null,
-            isFormDialogActive: false,
+            isPopupFormActive: false,
             word: null
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.renderPrimaryForm = this.renderPrimaryForm.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.cleanErrors = this.cleanErrors.bind(this);
         this.isValid = this.isValid.bind(this);
@@ -24,9 +63,9 @@ export default class PrimaryForm extends Component {
     handleSubmit(word) {
         if (this.isValid(word)) {
             ApiWords.fetchWord(word).then(word => {
-                this.setState({isFormDialogActive: true, word});
-            }).catch(err => {
-                this.setState({error: err.message});
+                this.setState({isPopupFormActive: true, word});
+            }).catch(error => {
+                this.setState({error: error.message});
             });
         }
     }
@@ -52,35 +91,45 @@ export default class PrimaryForm extends Component {
     }
 
     handleClose() {
-        this.setState({isFormDialogActive: false, word: null});
-    }
-
-    renderPrimaryForm() {
-        return <PrimaryFormUI
-                    onSubmit={this.handleSubmit}
-                    cleanErrors={this.cleanErrors}
-                    error={this.state.error}/>;
+        this.setState({isPopupFormActive: false, word: null});
     }
 
     render() {
-        if (!this.state.isFormDialogActive) {
-            return (
-                <div className='primary-form'>
-                    {this.renderPrimaryForm()}
-                </div>
-            );
-        } else {
-            return (
-                <div className='primary-form'>
-                    {this.renderPrimaryForm()}
-                    <FormDialog
-                        word={this.state.word}
-                        open={this.state.isFormDialogActive}
-                        onClose={this.handleClose}
-                        onSubmit={this.handleSubmit}
-                        action='add' />
-                </div>
-            );
-        }
+        const { isPopupFormActive, word, error } = this.state;
+        const { classes } = this.props;
+
+        return (
+            <div className='primary-form'>
+                <Form
+                    classes={classes}
+                    placeholder='Add word'
+                    name='Primary form'
+                    onSubmit={this.handleSubmit}
+                    cleanErrors={this.cleanErrors}
+                    error={error}/>
+                { isPopupFormActive && <PopupForm
+                    word={word}
+                    open={isPopupFormActive}
+                    onClose={this.handleClose}
+                    onSubmit={this.handleSubmit}
+                    action='add'/> }
+            </div>
+        );
     }
 }
+
+PrimaryForm.propTypes = {
+    classes: PropTypes.object.isRequired
+};
+
+Form.propTypes = {
+    classes: PropTypes.object.isRequired,
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    placeholder: PropTypes.string,
+    cleanErrors: PropTypes.func,
+    onSubmit: PropTypes.func,
+    label: PropTypes.string,
+    name: PropTypes.string
+};
+
+export default withStyles(formStyles)(PrimaryForm);

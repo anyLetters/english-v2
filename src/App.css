@@ -1,7 +1,7 @@
 @import url(normalize.css);
 @import url(./components/Menu/style.css);
 @import url(./components/PrimaryForm/style.css);
-@import url(./components/ToggleMode/style.css);
+@import url(./components/Mode/style.css);
 @import url(./components/Filter/style.css);
 @import url(./components/Search/style.css);
 @import url(./components/Stats/style.css);
@@ -10,10 +10,11 @@
 @import url(./components/List/style.css);
 @import url(./components/UI/List/style.css);
 @import url(./components/HomePage/style.css);
-@import url(./components/FormDialog/style.css);
+@import url(./components/PopupForm/style.css);
 @import url(./components/NotFound/style.css);
 @import url(./components/WordsPage/style.css);
 @import url(./components/Word/style.css);
+
 html, body {
   background-color: #eeeeee;
   height: 100%;

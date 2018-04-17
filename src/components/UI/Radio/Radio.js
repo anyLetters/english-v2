@@ -12,7 +12,7 @@ const styles = theme => ({
         width: '100%'
     },
     formControl: {
-        width: '100%',
+        width: '100%'
     },
     formLabel: {
         padding: theme.spacing.unit,
@@ -22,10 +22,10 @@ const styles = theme => ({
     group: {
         marginLeft: theme.spacing.unit*4,
         marginRight: theme.spacing.unit,
-        marginTop: theme.spacing.unit*2,
+        marginTop: theme.spacing.unit*2
     },
     formControlLabel: {
-        color: '#757575'    
+        color: '#757575'
     },
     radio: {
         color: grey[400]
@@ -34,7 +34,7 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
     state = {
-        value: '',
+        value: ''
     };
 
     handleChange = value => {
@@ -51,17 +51,16 @@ class RadioButtonsGroup extends React.Component {
                     <RadioGroup
                         className={classes.group}
                         value={this.state.value}
-                        onChange={this.handleChange}
-                    >
+                        onChange={this.handleChange}>
                         <FormControlLabel classes={{label: classes.formControlLabel}}
-                            control={<Radio className={classes.radio} 
-                                            checked={mode === 'RANDOM'} 
+                            control={<Radio className={classes.radio}
+                                            checked={mode === 'RANDOM'}
                                             value="RANDOM"
-                                            onChange={() => onChange('RANDOM')}/>} 
+                                            onChange={() => onChange('RANDOM')}/>}
                             label="Random" />
                         <FormControlLabel classes={{label: classes.formControlLabel}}
-                            control={<Radio className={classes.radio} 
-                                            checked={mode === 'SERIAL'} 
+                            control={<Radio className={classes.radio}
+                                            checked={mode === 'SERIAL'}
                                             value="SERIAL"
                                             onChange={() => onChange('SERIAL')}/>}
                             label="Serial" />
@@ -73,7 +72,7 @@ class RadioButtonsGroup extends React.Component {
 }
 
 RadioButtonsGroup.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(RadioButtonsGroup);

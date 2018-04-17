@@ -22,11 +22,11 @@ const ButtonStyle = {
 
 const IconStyle = {
     maxWidth: 16,
-    maxHeight: 16,
+    maxHeight: 16
 };
 
 const Page = ({value, isActive, onClick}) => (
-    <Button dense 
+    <Button dense
         style={isActive ? ButtonStyle.active : ButtonStyle.default}
         onClick={onClick}>{value.toString()}</Button>
 );

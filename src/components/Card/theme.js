@@ -1,6 +1,6 @@
 import color from '../../themeColors.js';
 
-const styles = theme => ({
+const cardStyles = theme => ({
     card: {
         width: 480,
         height: 280,
@@ -21,6 +21,7 @@ const styles = theme => ({
     },
     headline: {
         fontSize: 52,
+        wordBreak: 'break-word',
         fontWeight: 300,
         lineHeight: 1.1
     },
@@ -46,14 +47,7 @@ const styles = theme => ({
     },
     next: {
         margin: theme.spacing.unit
-    },
-    checked: {
-        color: color.blue[600],
-        '& + $bar': {
-            backgroundColor: color.blue[300]
-        }
-    },
-    bar: {}
+    }
 });
 
-export default styles;
+export default cardStyles;

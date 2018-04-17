@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import SearchField from '../UI/SearchField/SearchField.js';
+import {
+    React,
+    Component,
+    PropTypes,
+    InputField
+} from '../../imports.js';
 
 export default class Search extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             keyword: props.keyword
         };
@@ -13,6 +17,7 @@ export default class Search extends Component {
     }
 
     handleChange(keyword) {
+        keyword = keyword.target.value;
         this.setState({keyword});
         this.props.onChangeKeywordFilter({keyword});
     }
@@ -20,7 +25,12 @@ export default class Search extends Component {
     render() {
         return (
             <div className='search menu__element'>
-                <SearchField keyword={this.state.keyword} onChange={this.handleChange} />
+                <InputField
+                    label='Search field'
+                    name='Search'
+                    placeholder='! - exact match, @ - date'
+                    value={this.state.keyword}
+                    onChange={this.handleChange} />
             </div>
         );
     }

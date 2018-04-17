@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import {Link} from 'react-router-dom';
 import styles from './theme.js';
 
-class Navigation extends React.Component {
+class Navigation extends Component {
     constructor(props) {
         super(props);
 

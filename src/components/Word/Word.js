@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import EditForm from '../../containers/FormContainer.js';
+import EditForm from '../../containers/PopupFormContainer.js';
 import Loading from '../UI/Loading/Loading.js';
 import NotFound from '../NotFound/NotFound.js';
 import _Word from '../UI/Word/Word.js';
@@ -60,11 +60,14 @@ export default class Word extends Component {
     }
 
     render() {
-        if (this.state.word && !this.state.fetchingWords) {
+        const { word, fetchingWords } = this.state;
+
+        if (word && !fetchingWords) {
             return this.renderShowcase();
-        } else if (!this.state.word) {
+        } else if (!word) {
             return <NotFound/>;
         }
+
         return <Loading />;
     }
 }

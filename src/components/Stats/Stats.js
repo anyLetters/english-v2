@@ -2,10 +2,10 @@ import React from 'react';
 import StatsUI from '../UI/Stats/Stats.js';
 import PropTypes from 'prop-types';
 
-export default function Stats(props) {
+export default function Stats({ total, totalHardWords }) {
     return (
         <div className='stats menu__element'>
-            <StatsUI total={props.total} totalHardWords={props.totalHardWords} />
+            <StatsUI total={total} totalHardWords={totalHardWords} />
         </div>
     );
 }

@@ -1,9 +1,12 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import Switchbox from '../UI/Switchbox/Switchbox.js';
-import CharactersFilterField from '../UI/CharactersFilterField/CharactersFilterField.js';
+import {
+    React,
+    Component,
+    PropTypes,
+    Switchbox,
+    InputField
+} from '../../imports.js';
 
-export default class Filter extends Component {
+class Filter extends Component {
     constructor(props) {
         super(props);
 
@@ -11,16 +14,17 @@ export default class Filter extends Component {
             characters: props.filter.characters
         };
 
-        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+        this.handleSwitchboxChange = this.handleSwitchboxChange.bind(this);
         this.handleChangeInput = this.handleChangeInput.bind(this);
     }
 
-    handleCheckboxChange() {
+    handleSwitchboxChange() {
         this.props.onToggleHardFilter();
     }
 
-    handleChangeInput(value) {
-        let characters = value.replace(/[^A-Za-z\s!?]/g,'').split('');
+    handleChangeInput(text) {
+        let parsedText = Array.from(new Set(text.target.value.split(', '))).toString();
+        let characters = parsedText.replace(/[^A-Za-z\s!?]/g,'').split('');
         characters = Array.from(new Set(characters)).toString();
 
         if (this.state.characters !== characters.split(',').join(', ')) {
@@ -33,12 +37,16 @@ export default class Filter extends Component {
     render() {
         return (
             <div className='filter menu__element'>
-                <CharactersFilterField
+                <InputField
+                    label='Characters'
+                    name='Filter'
+                    placeholder='a, b, c'
                     value={this.state.characters}
                     onChange={this.handleChangeInput} />
                 <Switchbox
                     checked={this.props.filter.hard}
-                    onChange={this.handleCheckboxChange} />
+                    onChange={this.handleSwitchboxChange}
+                    label='Only hard' />
             </div>
         );
     }
@@ -49,3 +57,5 @@ Filter.propTypes = {
     onChangeCharactersFilter: PropTypes.func.isRequired,
     onToggleHardFilter: PropTypes.func.isRequired
 };
+
+export default Filter;

@@ -7,7 +7,8 @@ function mapStateToProps(state) {
     return {
         words: getVisibleWords(state),
         mode: state.mode,
-        fetching: state.fetching
+        fetching: state.fetching,
+        filter: state.filter
     };
 }
 

@@ -48,7 +48,7 @@ class MouseOverPopover extends React.Component {
     };
 
     render() {
-        const { classes, words, pos } = this.props;
+        const { classes, words, pos, anchorOrigin, transformOrigin } = this.props;
         const { anchorEl } = this.state;
         const open = !!anchorEl;
 
@@ -63,21 +63,13 @@ class MouseOverPopover extends React.Component {
                 </Typography>
                 <Popover
                     className={classes.popover}
-                    classes={{
-                        paper: classes.paper
-                    }}
+                    classes={{paper: classes.paper}}
                     open={open}
                     anchorEl={anchorEl}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center'
-                    }}
-                    transformOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left'
-                    }}
+                    anchorOrigin={anchorOrigin}
+                    transformOrigin={transformOrigin}
                     onClose={this.handlePopoverClose}>
-                    <Typography className={classes.typography}>{words}</Typography>
+                <Typography className={classes.typography}>{words}</Typography>
                 </Popover>
             </span>
         );
@@ -85,9 +77,11 @@ class MouseOverPopover extends React.Component {
 }
 
 MouseOverPopover.propTypes = {
-  classes: PropTypes.object.isRequired,
-  words: PropTypes.string,
-  pos: PropTypes.string
+    classes: PropTypes.object.isRequired,
+    words: PropTypes.string.isRequired,
+    pos: PropTypes.string,
+    anchorOrigin: PropTypes.object.isRequired,
+    transformOrigin: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(MouseOverPopover);

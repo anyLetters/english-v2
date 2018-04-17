@@ -13,7 +13,7 @@ const styles = theme => ({
         right: 0,
         margin: 'auto',
         color: blue[400]
-    },
+    }
 });
 
 function Loading(props) {
@@ -24,7 +24,7 @@ function Loading(props) {
 }
 
 Loading.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Loading);
