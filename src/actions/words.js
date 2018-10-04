@@ -13,7 +13,7 @@ export function getWords() {
             type: REQUEST_WORDS
         });
 
-        return axios.get('/api/data')
+        return axios.get('/api/words')
             .then(response => response.data)
             .then(data => dispatch({
                 type: GET_WORDS,

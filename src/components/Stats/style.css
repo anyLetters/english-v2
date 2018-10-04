@@ -1,3 +1,5 @@
 .stats {
   flex-grow: 1;
-  min-width: 100px; }
+  min-width: 100px;
+  box-sizing: border-box;
+  max-width: 293.94px; }

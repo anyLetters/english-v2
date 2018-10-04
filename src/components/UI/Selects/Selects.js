@@ -4,7 +4,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 class SimpleMenu extends React.Component {
 	state = {
-		anchorEl: null,
+		anchorEl: null
 	};
 
 	handleClick = event => {
@@ -25,7 +25,7 @@ class SimpleMenu extends React.Component {
 					onClick={() => {this.handleClose(); onChange({pos})}}>
 					{pos}
 				</MenuItem>
-			)
+			);
 		});
 
 		return (

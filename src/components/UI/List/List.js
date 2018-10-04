@@ -130,7 +130,11 @@ class _Table extends React.Component {
 
     handleToggleABC = () => {
         this.props.onToggleAlphabeticalOrder();
-        this.setState({sortByABC: !this.state.sortByABC});
+        this.setState(prevState => {
+            return {
+                sortByABC: !prevState.sortByABC
+            };
+        });
     }
 
     handleChangePage = page => {
@@ -176,25 +180,23 @@ class _Table extends React.Component {
                                 return (
                                     <TableRow key={word.id} className={classes.tableRow}>
                                         <TableCell className={word.hard ? classes.tableCellIdHard : classes.tableCellId}>
-                                            <a onClick={() => onToggleHard(word.id)}>
-                                                {word.id}
-                                            </a>
+                                            <a onClick={() => onToggleHard(word.id)}>{word.id}</a>
                                         </TableCell>
                                             <TableCell className={classes.tableCellEng}>
                                                 <a  target='_blank'
                                                     href={`https://en.oxforddictionaries.com/definition/${word.eng}`}
                                                     style={{
                                                         outline: 'none',
-                                                        textDecoration: 'none', 
+                                                        textDecoration: 'none',
                                                         color: 'rgba(0, 0, 0, 0.87)'
                                                     }}>
                                                     {word.eng}
                                                 </a>
                                             </TableCell>
                                             <TableCell className={classes.tableCellRus}>
-                                                <Link to={`/words/${word.id}/word`} style={{
+                                                <Link to={`/words/${word.id}`} style={{
                                                     outline: 'none',
-                                                    textDecoration: 'none', 
+                                                    textDecoration: 'none',
                                                     color: 'rgba(0, 0, 0, 0.87)'
                                                 }}>
                                                     {word.rus}

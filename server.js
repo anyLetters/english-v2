@@ -2,16 +2,37 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const data = require('./api/data');
-
 const app = express();
 
 function updateJSON(data) {
     fs.writeFile('./api/data.json', JSON.stringify(data), error => {
         if (error) throw error;
     });
-};
+}
+
+app.get('/api/download', (req, res) => {
+    let str = '';
+    const id = data.last_export;
+    const index = data.words.findIndex(word => word.id === id);
+    const words = data.words.slice(index + 1, data.words.length);
+
+    words.forEach(word => {
+        let trans = [];
+        str += `\n${word.eng};`;
+        for (let key in word.translations) {
+            trans.push(...word.translations[key]);
+        }
+        str += trans.join(', ');
+    });
+    fs.writeFile('./api/export.txt', str, 'utf8', err => {
+        if (err) throw err;
+        data.last_export = data.words[data.words.length - 1].id;
+        str = '';
+        updateJSON(data);
+        res.download('./api/export.txt');
+    });
+});
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -24,13 +45,30 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/data', (req, res) => {
-    res.send(data);
+app.get('/api/words', (req, res) => {
+    res.send(data.words);
+});
+
+app.get('/api/export', (req, res) => {
+    const id = data.last_export;
+    const index = data.words.findIndex(word => word.id === id);
+    if (index >= 1) {
+        const wordsLength = data.words.slice(index + 1, data.words.length).length;
+        res.send({
+            toExport: wordsLength,
+            lastWord: data.words[index]
+        });
+    } else {
+        res.send({
+            toExport: 0,
+            lastWord: null
+        });
+    }
 });
 
 app.post('/api/words', (req, res) => {
     const word = {
-        id: data[data.length - 1].id + 1,
+        id: data.words[data.words.length - 1].id + 1,
         eng: req.body.word.eng,
         rus: req.body.word.rus,
         hard: req.body.word.hard,
@@ -40,7 +78,7 @@ app.post('/api/words', (req, res) => {
 
     console.log(word);
 
-    data.push(word);
+    data.words.push(word);
 
     updateJSON(data);
 
@@ -52,10 +90,10 @@ app.put('/api/words/:id', (req, res) => {
 
     console.log(req.body.word);
 
-    for (let i = 1; i < data.length; i++) {
-        if (data[i].id === req.body.word.id) {
-            data[i] = req.body.word;
-            word = data[i];
+    for (let i = 1; i < data.words.length; i++) {
+        if (data.words[i].id === req.body.word.id) {
+            data.words[i] = req.body.word;
+            word = data.words[i];
         }
     }
 
@@ -69,10 +107,10 @@ app.put('/api/words/:id', (req, res) => {
 app.patch('/api/words/:id', (req, res) => {
     let word;
 
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].id === parseInt(req.params.id)) {
-            data[i].hard = !data[i].hard;
-            word = data[i];
+    for (let i = 0; i < data.words.length; i++) {
+        if (data.words[i].id === parseInt(req.params.id)) {
+            data.words[i].hard = !data.words[i].hard;
+            word = data.words[i];
         }
     }
 
@@ -86,14 +124,14 @@ app.patch('/api/words/:id', (req, res) => {
 });
 
 app.delete('/api/words/:id', (req, res) => {
-    const index = data.findIndex(word => word.id == req.params.id);
+    const index = data.words.findIndex(word => word.id == req.params.id);
 
     if (index === -1) return res.sendStatus(404);
 
-    data.splice(index, 1);
+    data.words.splice(index, 1);
 
-    for (let i = index; i < data.length; i++) {
-        data[i].id = data[i].id - 1;
+    for (let i = index; i < data.words.length; i++) {
+        data.words[i].id = data.words[i].id - 1;
     }
 
     updateJSON(data);

@@ -10,8 +10,6 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "express": "^4.16.2",
-    "google-auth-library": "0.*",
-    "googleapis": "^25.0.0",
     "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.26",
     "material-ui-icons": "^1.0.0-beta.17",
@@ -34,7 +32,7 @@
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive --usePolling --polling-interval 500",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js node-server",
     "build-js": "react-scripts build",

@@ -14,7 +14,6 @@
 @import url(./components/NotFound/style.css);
 @import url(./components/WordsPage/style.css);
 @import url(./components/Word/style.css);
-
 html, body {
   background-color: #eeeeee;
   height: 100%;

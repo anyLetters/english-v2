@@ -61,7 +61,14 @@ const Word = props => {
         <CardContent>
             <div className={classes.cardContent}>
                 <Typography className={classes.headline} type="headline" component="h2">
-                    {isRussian ? word.rus : word.eng}
+                    {isRussian
+                    ?   word.rus
+                    :   <a
+                            href={`https://en.oxforddictionaries.com/definition/${word.eng}`}
+                            target='_blank'
+                            style={{textDecoration: 'none', outline: 'none', color: 'inherit'}}>
+                            {word.eng}
+                        </a>}
                 </Typography>
                 <Typography component='span' className={classes.pos}>{partsOfSpeech}</Typography>
             </div>
@@ -74,7 +81,7 @@ const ControlBar = props => {
 
     return (
         <CardActions className={classes.actionsButtons}>
-            <LinkButton to={`/words/${word.id}/word`}>more</LinkButton>
+            <LinkButton to={`/words/${word.id}`}>more</LinkButton>
             <IconButton onClick={() => onToggleHard(word.id)}>
                 <HardIcon className={word.hard ? classes.hardOn : null}/>
             </IconButton>
@@ -128,8 +135,9 @@ class Card extends Component {
     }
 
     handleSwitchLang() {
-        const { isSwitchedToRussian } = this.state;
-        this.setState({ isSwitchedToRussian: !isSwitchedToRussian });
+        this.setState(prevState => {
+            return { isSwitchedToRussian: !prevState.isSwitchedToRussian };
+        });
     }
 
     componentWillReceiveProps(nextProps) {

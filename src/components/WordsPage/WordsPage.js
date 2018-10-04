@@ -13,7 +13,7 @@ export default function WordsPage({match}) {
             <Switch>
                 <Route path={`${match.url}/card`} component={CardContainer} />
                 <Route path={`${match.url}/list`} component={ListContainer} />
-                <Route path={`${match.url}/:id/word`} component={WordContainer} />
+                <Route path={`${match.url}/:id`} component={WordContainer} />
             </Switch>
         </div>
     );
