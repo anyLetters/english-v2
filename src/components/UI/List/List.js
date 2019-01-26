@@ -119,14 +119,15 @@ class _Table extends React.Component {
 
         this.state = {
             sortKey: props.sortKey,
-            sortByABC: props.sortByABC
+            sortByABC: props.sortByABC,
+            showRussianWords: true
         };
     }
 
     handleChangeSortKey = key => {
         this.props.onChangeSortKey(key);
         this.setState({sortKey: key});
-    };
+    }
 
     handleToggleABC = () => {
         this.props.onToggleAlphabeticalOrder();
@@ -137,19 +138,25 @@ class _Table extends React.Component {
         });
     }
 
+    showRussianWords = () => {
+        this.setState(prevState => ({
+            showRussianWords: !prevState.showRussianWords
+        }));
+    }
+
     handleChangePage = page => {
         this.props.onPageChange(page);
-    };
+    }
 
     handleChangeRowsPerPage = event => {
         event.preventDefault();
         this.props.onRowsChange(event.target.value);
-    };
+    }
 
     render() {
         const { classes, words, page, totalPages, rows, onToggleHard } = this.props;
         const emptyRows = rows - Math.min(rows, ((totalPages - page) * rows));
-        const { sortKey, sortByABC } = this.state;
+        const { sortKey, sortByABC, showRussianWords } = this.state;
 
         return (
             <Paper className={classes.root}>
@@ -171,7 +178,11 @@ class _Table extends React.Component {
                                     Word
                                 </a>
                             </TableCell>
-                            <TableCell className={classes.tableHeadCellRus}>Translation</TableCell>
+                            <TableCell className={classes.tableHeadCellRus}>
+                                <a onClick={this.showRussianWords} className='nonABCsort'>
+                                    Translation
+                                </a>
+                            </TableCell>
                             <TableCell className={classes.tableHeadCellPos}>Meanings</TableCell>
                         </TableRow>
                     </TableHead>
@@ -194,13 +205,13 @@ class _Table extends React.Component {
                                                 </a>
                                             </TableCell>
                                             <TableCell className={classes.tableCellRus}>
-                                                <Link to={`/words/${word.id}`} style={{
+                                                {showRussianWords && <Link to={`/words/${word.id}`} style={{
                                                     outline: 'none',
                                                     textDecoration: 'none',
                                                     color: 'rgba(0, 0, 0, 0.87)'
                                                 }}>
                                                     {word.rus}
-                                                </Link>
+                                                </Link>}
                                             </TableCell>
                                         <TableCell className={classes.tableCellPos}>
                                             <div className='pos-container'>

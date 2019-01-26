@@ -63,8 +63,7 @@ const Word = props => {
                 <Typography className={classes.headline} type="headline" component="h2">
                     {isRussian
                     ?   word.rus
-                    :   <a
-                            href={`https://en.oxforddictionaries.com/definition/${word.eng}`}
+                    :   <a  href={`https://en.oxforddictionaries.com/definition/${word.eng}`}
                             target='_blank'
                             style={{textDecoration: 'none', outline: 'none', color: 'inherit'}}>
                             {word.eng}
